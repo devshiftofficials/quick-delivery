@@ -677,7 +677,7 @@ const FilterableTable = () => {
                                         bgcolor: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
                                       }}
                                     >
-                                      <CategoryIcon sx={{ fontSize: 32, color: '#6366f1' }} />
+                                      <Folder size={32} style={{ color: '#6366f1' }} />
                                     </Box>
                       )}
                                 </Box>

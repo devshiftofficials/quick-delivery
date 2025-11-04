@@ -228,7 +228,7 @@ const CartPage = () => {
     {isAuthenticated === false &&(<>
       <p className="text-center text-gray-500 mt-2">
       For the best shopping experience, 
-      <Link href="/customer/pages/register" className="text-blue-500 underline cursor-pointer">
+      <Link href="/admin" className="text-blue-500 underline cursor-pointer">
         sign in
       </Link>
     </p>

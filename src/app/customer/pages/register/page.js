@@ -255,7 +255,7 @@ const Register = () => {
         <div className="mt-4 text-center">
           <p className="text-gray-700">Already have an account?</p>
           <button
-            onClick={() => router.push('/customer/pages/login')}
+            onClick={() => router.push('/admin')}
             className="mt-2 py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             disabled={loading}
           >
