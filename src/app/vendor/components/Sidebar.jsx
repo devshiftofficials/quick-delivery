@@ -73,10 +73,12 @@ const Sidebar = () => {
           boxSizing: "border-box",
           background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
           color: "#1e293b",
-          height: "100%",
+          height: "100vh",
           maxHeight: "100vh",
           overflowY: "auto",
           overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
           borderRight: "1px solid rgba(99, 102, 241, 0.08)",
           boxShadow: "2px 0 15px rgba(99, 102, 241, 0.04), inset -1px 0 0 rgba(99, 102, 241, 0.03)",
           position: "fixed",
@@ -113,6 +115,7 @@ const Sidebar = () => {
             position: "relative",
             overflow: "hidden",
             backdropFilter: "blur(8px)",
+            flexShrink: 0,
           }}
         >
           <Box
@@ -307,10 +310,11 @@ const Sidebar = () => {
           my: 1,
           height: "1px",
           background: "linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent)",
+          flexShrink: 0,
         }}
       />
 
-      <List sx={{ p: 0 }}>
+      <List sx={{ p: 0, flex: 1, overflowY: "auto", overflowX: "hidden", pb: 2 }}>
         {menuItems.map((item, index) => {
           const IconComponent = item.icon;
           const isActive = pathname === item.href;
