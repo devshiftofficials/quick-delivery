@@ -8,6 +8,10 @@ const nextConfig = {
           },
         ],
       },
+    // Proper handling of static files
+    poweredByHeader: false,
+    // Optimize static file serving
+    compress: true,
 };
 
 export default nextConfig;

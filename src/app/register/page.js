@@ -76,32 +76,76 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match!');
       return;
     }
+
+    // Validate password length
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters long.');
+      return;
+    }
+
+    // Validate phone number format
     const phoneRegex = /^\+92\d{10}$/;
     if (!phoneRegex.test(formData.phoneno)) {
       toast.error('Phone number must be in the format +92xxxxxxxxxx with exactly 10 digits.');
       return;
     }
+
+    // Validate role
+    if (!formData.role || (formData.role !== 'CUSTOMER' && formData.role !== 'VENDOR')) {
+      toast.error('Please select a valid account type.');
+      return;
+    }
+
     setLoading(true);
     try {
       let uploadedImageUrl = '';
-      if (formData.base64) uploadedImageUrl = await uploadImage(formData.base64);
+      if (formData.base64) {
+        try {
+          uploadedImageUrl = await uploadImage(formData.base64);
+        } catch (imageError) {
+          console.error('Image upload error:', imageError);
+          // Continue without image if upload fails
+          uploadedImageUrl = '';
+        }
+      }
+      
       const formDataToSend = {
-        name: formData.name, email: formData.email, password: formData.password,
-        phoneno: formData.phoneno, city: formData.city, role: formData.role,
-        imageUrl: uploadedImageUrl,
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        phoneno: formData.phoneno.trim(),
+        city: formData.city.trim(),
+        role: formData.role, // Ensure role is CUSTOMER or VENDOR
+        imageUrl: uploadedImageUrl || null,
       };
+
       const response = await fetch('/api/users', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formDataToSend),
       });
+
       const data = await response.json();
+      
       if (response.ok && data.status) {
-        setSnackbar({ open: true, message: 'Registration successful! Please check your email to verify your account.', severity: 'success' });
-        toast.success('Registration successful! Please check your email to verify your account.');
+        const successMessage = formData.role === 'VENDOR' 
+          ? 'Vendor account created successfully! Please check your email to verify your account.'
+          : 'Registration successful! Please check your email to verify your account.';
+        
+        setSnackbar({ open: true, message: successMessage, severity: 'success' });
+        toast.success(successMessage);
         setTimeout(() => router.push('/login'), 3000);
       } else {
         const errorMsg = data.message || 'Failed to register. Please try again.';
@@ -110,7 +154,7 @@ const RegisterPage = () => {
       }
     } catch (error) {
       console.error('Error registering user:', error);
-      const errorMsg = 'An unexpected error occurred. Please try again.';
+      const errorMsg = error.message || 'An unexpected error occurred. Please try again.';
       setSnackbar({ open: true, message: errorMsg, severity: 'error' });
       toast.error(errorMsg);
     } finally {

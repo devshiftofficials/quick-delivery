@@ -108,7 +108,16 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to log in. Please check your credentials and try again.';
+      let errorMessage = 'Failed to log in. Please check your credentials and try again.';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status === 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       setError(errorMessage);
       setSnackbar({
         open: true,

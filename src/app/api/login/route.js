@@ -72,6 +72,19 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('Error during login:', error);
-    return NextResponse.json({ message: 'Internal server error', error: error.message }, { status: 500 });
+    // Provide more specific error messages
+    let errorMessage = 'An error occurred during login. Please try again.';
+    
+    if (error.message) {
+      // Log full error for debugging but send safe message to client
+      console.error('Full login error:', error);
+      errorMessage = 'Login failed. Please check your credentials and try again.';
+    }
+    
+    return NextResponse.json({ 
+      success: false,
+      message: errorMessage,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined 
+    }, { status: 500 });
   }
 }

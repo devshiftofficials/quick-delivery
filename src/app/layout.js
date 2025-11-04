@@ -10,6 +10,7 @@ import WhatsAppButton from './customer/components/whatsappbutton';
 const poppins = Poppins({
   weight: ['400', '700'],
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export default function RootLayout({ children }) {
