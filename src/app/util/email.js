@@ -11,7 +11,10 @@ export async function sendVerificationEmail(email, token) {
     },
   });
 
-  const verificationLink = `${process.env.BASE_URL}/api/verify/${token}`;
+  // Use BASE_URL from environment variable, or fallback to localhost for development
+  // For Vercel: Set BASE_URL=https://quick-delivery2.vercel.app in environment variables
+  const baseUrl = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const verificationLink = `${baseUrl}/api/verify/${token}`;
 
 
   const mailOptions = {

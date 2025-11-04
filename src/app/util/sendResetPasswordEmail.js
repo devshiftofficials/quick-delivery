@@ -12,12 +12,17 @@ export async function sendResetPasswordEmail(email, token) {
       },
     });
 
+    // Use BASE_URL from environment variable, or fallback to localhost for development
+    // For Vercel: Set BASE_URL=https://quick-delivery2.vercel.app in environment variables
+    const baseUrl = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const resetLink = `${baseUrl}/customer/pages/reset?token=${token}`;
+
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: email,
       subject: 'Password Reset',
-      text: `You requested a password reset. Please reset your password by clicking the following link: ${process.env.BASE_URL}/customer/pages/reset?token=${token}`,
-      html: `<p>You requested a password reset. Please reset your password by clicking the following link: <a href="${process.env.BASE_URL}/customer/pages/reset?token=${token}">Reset Password</a></p>`,
+      text: `You requested a password reset. Please reset your password by clicking the following link: ${resetLink}`,
+      html: `<p>You requested a password reset. Please reset your password by clicking the following link: <a href="${resetLink}">Reset Password</a></p>`,
     };
 
     const ok = await transporter.sendMail(mailOptions);
