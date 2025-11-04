@@ -1,6 +1,19 @@
 // src/util/prisma.js
 import { PrismaClient } from '@prisma/client';
 
+// Validate DATABASE_URL format
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+	console.error('❌ DATABASE_URL environment variable is not set!');
+	throw new Error('DATABASE_URL environment variable is required');
+}
+
+if (!databaseUrl.startsWith('mysql://')) {
+	console.error('❌ Invalid DATABASE_URL format. It must start with "mysql://"');
+	console.error('Current DATABASE_URL:', databaseUrl ? `${databaseUrl.substring(0, 20)}...` : 'undefined');
+	throw new Error('DATABASE_URL must start with mysql:// protocol. Example: mysql://user:password@host:port/database');
+}
+
 // Create the client instance with connection pool settings
 const rawPrisma = new PrismaClient({
 	log: ['error'], // Only log actual errors, suppress connection warnings

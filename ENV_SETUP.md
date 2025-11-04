@@ -42,6 +42,12 @@ In your Vercel project dashboard, set these environment variables:
    - The code will auto-detect this, but setting it explicitly is recommended
 
 2. **DATABASE_URL** = Your production database connection string
+   - **IMPORTANT**: Must start with `mysql://`
+   - Format: `mysql://username:password@host:port/database_name`
+   - Example: `mysql://user123:password123@db.example.com:3306/mydatabase`
+   - For PlanetScale: `mysql://username:password@host.planetscale.com/database?sslaccept=strict`
+   - For Railway: `mysql://user:password@containers-us-west-xxx.railway.app:port/railway`
+   - Make sure the URL is properly encoded if it contains special characters
 
 3. **JWT_SECRET** = A secure random string for JWT token signing
 
@@ -64,11 +70,50 @@ In your Vercel project dashboard, set these environment variables:
 - For email links to work correctly in production, make sure `BASE_URL` is set in Vercel
 - Never commit your `.env` file to git (it should be in `.gitignore`)
 
+## DATABASE_URL Format (CRITICAL):
+
+The DATABASE_URL **MUST** start with `mysql://` protocol. Examples:
+
+### Correct Formats:
+```env
+# Standard MySQL
+DATABASE_URL="mysql://username:password@hostname:3306/database_name"
+
+# PlanetScale
+DATABASE_URL="mysql://username:password@host.planetscale.com/database?sslaccept=strict"
+
+# Railway
+DATABASE_URL="mysql://user:password@containers-us-west-xxx.railway.app:port/railway"
+
+# Hostinger/Shared Hosting
+DATABASE_URL="mysql://username:password@localhost:3306/database_name"
+```
+
+### Common Mistakes to Avoid:
+❌ `DATABASE_URL="user:password@host:port/database"` (missing mysql://)
+❌ `DATABASE_URL="postgresql://..."` (wrong protocol for MySQL)
+❌ `DATABASE_URL="host:port/database"` (incomplete format)
+
+### How to Set in Vercel:
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add or edit `DATABASE_URL`
+4. Paste your **complete** MySQL connection string starting with `mysql://`
+5. Make sure it's set for **Production** environment (and Preview if needed)
+6. **Redeploy** your application after adding/updating
+
+### Troubleshooting:
+- If you see "URL must start with the protocol `mysql://`", check your DATABASE_URL in Vercel
+- Make sure there are no extra spaces or quotes around the URL
+- Verify the URL is set for the correct environment (Production/Preview/Development)
+- Redeploy after making changes to environment variables
+
 ## Quick Setup Checklist:
 
 ✅ Create `.env` file in root directory for local development  
 ✅ Add all required variables to `.env`  
+✅ Set `DATABASE_URL` with `mysql://` protocol in Vercel  
 ✅ Set `BASE_URL=https://quick-delivery2.vercel.app` in Vercel  
 ✅ Set all other environment variables in Vercel dashboard  
-✅ Redeploy your application after setting environment variables
+✅ **Redeploy your application** after setting environment variables
 
