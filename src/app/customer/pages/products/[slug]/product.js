@@ -106,7 +106,7 @@ const ProductPage = ({ productData }) => {
     if (!username) {
       // If user is not authenticated, redirect to login page
       toast.error('You must be logged in to submit a review.');
-      router.push('/customer/pages/login'); // Redirect to login page
+      router.push('/admin'); // Redirect to login page
       return;
     }
 
@@ -677,7 +677,7 @@ const ProductPage = ({ productData }) => {
               ) : (
                 // Show this statement if the user is not logged in
                 <p className="text-gray-500">
-                  If you want to leave a review, please <a href="/customer/pages/login" className="text-blue-500">log in</a>.
+                  If you want to leave a review, please <a href="/admin" className="text-blue-500">log in</a>.
                 </p>
               )}
             </div>

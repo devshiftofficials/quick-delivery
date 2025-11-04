@@ -21,7 +21,7 @@ const UserOrders = () => {
       const token = localStorage.getItem('authToken');
       if (!token) {
         alert('You need to log in to view your orders');
-        router.push('/customer/pages/login');
+        router.push('/admin');
         return;
       }
 

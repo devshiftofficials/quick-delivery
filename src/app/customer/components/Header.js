@@ -178,7 +178,7 @@ useEffect(() => {
     setIsSignOutModalOpen(false);
   
     // Redirect the user to the login page
-    router.push('/customer/pages/login');
+    router.push('/admin');
   };
 
 
@@ -384,7 +384,7 @@ useEffect(() => {
           ) : (
             <div className="hidden lg:flex items-center">
               <Link
-                href="/customer/pages/login"
+                href="/admin"
                 className="text-gray-700 text-[16px] mr-2 hover:text-blue-500 transition-colors duration-300"
               >
                 Sign in
@@ -454,7 +454,7 @@ useEffect(() => {
               </div>
             ) : (
               <Link
-                href="/customer/pages/login"
+                href="/admin"
                 className="text-gray-700 hover:text-blue-500 py-2"
               >
                 Sign In
@@ -484,7 +484,7 @@ useEffect(() => {
                   localStorage.removeItem('userName');
                   setAuthToken(null);
                   setIsSignOutModalOpen(false);
-                  router.push('/customer/pages/login');
+                  router.push('/admin');
                 }}
               >
                 Sign Out

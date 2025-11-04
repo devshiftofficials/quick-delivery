@@ -109,7 +109,7 @@ const Register = () => {
       if (response.ok) {
         toast.success('User registered successfully! Please check your email to verify your account.');
         setTimeout(() => {
-          router.push('/customer/pages/login');
+          router.push('/admin');
         }, 3000); // Redirect to login after 3 seconds
       } else {
         toast.error(`Error: ${data.message || 'Failed to register user'}`);

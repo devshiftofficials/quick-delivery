@@ -288,7 +288,7 @@ const CheckoutPage = () => {
           userId = decoded.id; // Get the user ID from the token
         } else {
           localStorage.removeItem('authToken');
-          router.push('/customer/pages/login'); // Redirect to login if token is expired
+          router.push('/admin'); // Redirect to login if token is expired
           return;
         }
       }
