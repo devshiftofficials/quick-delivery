@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { LocalShipping as ShippingIcon, Title as TitleIcon, Description as DescriptionIcon, Save as SaveIcon } from '@mui/icons-material';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 
 // Dynamically import JoditEditor for SSR compatibility
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: true });
@@ -270,37 +271,7 @@ const ShippingPolicyPage = () => {
         </Fade>
 
         {/* Loading Overlay */}
-        {isLoading && (
-          <Fade in={isLoading}>
-            <Box
-              sx={{
-                position: 'fixed',
-                inset: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: 'rgba(0, 0, 0, 0.7)',
-                backdropFilter: 'blur(4px)',
-                zIndex: 2000,
-              }}
-            >
-              <CircularProgress size={60} sx={{ color: '#ff5900', mb: 2 }} />
-              <Typography
-                sx={{
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  fontWeight: 600,
-                  background: 'linear-gradient(45deg, #ffffff 30%, #e0e0e0 90%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Saving...
-              </Typography>
-            </Box>
-          </Fade>
-        )}
+        {isLoading && <BeautifulLoader message="Saving..." />}
       </Box>
     </Box>
   );

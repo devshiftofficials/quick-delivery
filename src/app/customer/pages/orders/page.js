@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { ThreeDots } from 'react-loader-spinner';
+import BeautifulLoader from '../../components/BeautifulLoader';
 import { EyeIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
@@ -21,7 +21,7 @@ const UserOrders = () => {
       const token = localStorage.getItem('authToken');
       if (!token) {
         alert('You need to log in to view your orders');
-        router.push('/admin');
+        router.push('/login');
         return;
       }
 
@@ -91,17 +91,7 @@ const UserOrders = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots
-          height={80}
-          width={80}
-          color="#3498db"
-          ariaLabel="circle-loading"
-          visible={true}
-        />
-      </div>
-    );
+    return <BeautifulLoader message="Loading your orders..." />;
   }
 
   if (error) {

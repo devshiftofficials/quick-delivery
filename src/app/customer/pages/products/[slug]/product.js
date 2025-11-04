@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { addToCart, setCart } from '../../../../store/cartSlice';
-import { ThreeDots } from 'react-loader-spinner';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 import Modal from 'react-modal';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
@@ -106,7 +106,7 @@ const ProductPage = ({ productData }) => {
     if (!username) {
       // If user is not authenticated, redirect to login page
       toast.error('You must be logged in to submit a review.');
-      router.push('/admin'); // Redirect to login page
+      router.push('/login'); // Redirect to login page
       return;
     }
 
@@ -321,29 +321,14 @@ const ProductPage = ({ productData }) => {
 
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots height="80" width="80" radius="9" color="#3498db" ariaLabel="three-dots-loading" visible={true} />
-      </div>
-    );
+    return <BeautifulLoader message="Loading product..." />;
   }
 
 
   return (
     <div className="container mx-auto px-4 pt-8">
       <ToastContainer />
-      {isNavigating && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#3498db"
-            ariaLabel="three-dots-loading"
-            visible={true}
-          />
-        </div>
-      )}
+      {isNavigating && <BeautifulLoader message="Loading..." />}
       <div className="flex space-x-6 min-h-screen">
         {/* Product Images and Details */}
         <div className="w-full lg:w-3/5 mb-0 flex flex-col lg:flex-row h-full ">
@@ -677,7 +662,7 @@ const ProductPage = ({ productData }) => {
               ) : (
                 // Show this statement if the user is not logged in
                 <p className="text-gray-500">
-                  If you want to leave a review, please <a href="/admin" className="text-blue-500">log in</a>.
+                  If you want to leave a review, please <a href="/login" className="text-blue-500">log in</a>.
                 </p>
               )}
             </div>

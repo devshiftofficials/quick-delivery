@@ -11,9 +11,24 @@ export async function sendVerificationEmail(email, token) {
     },
   });
 
-  // Use BASE_URL from environment variable, or fallback to localhost for development
-  // For Vercel: Set BASE_URL=https://quick-delivery2.vercel.app in environment variables
-  const baseUrl = process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  // Use BASE_URL from environment variable, or auto-detect from Vercel/deployment
+  // Priority: BASE_URL > VERCEL_URL > NEXT_PUBLIC_BASE_URL > localhost
+  let baseUrl = process.env.BASE_URL;
+  
+  if (!baseUrl) {
+    // Auto-detect Vercel URL
+    if (process.env.VERCEL_URL) {
+      baseUrl = `https://${process.env.VERCEL_URL}`;
+    } else if (process.env.NEXT_PUBLIC_BASE_URL) {
+      baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    } else {
+      // Fallback to localhost only in development
+      baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://quick-delivery2.vercel.app' 
+        : 'http://localhost:3000';
+    }
+  }
+  
   const verificationLink = `${baseUrl}/api/verify/${token}`;
 
 

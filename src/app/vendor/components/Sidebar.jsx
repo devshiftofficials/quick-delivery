@@ -39,7 +39,7 @@ const Sidebar = () => {
     const token = Cookies.get("token") || localStorage.getItem("token");
     const role = localStorage.getItem("role");
     if (!token || role !== 'VENDOR') {
-      router.push("/admin");
+      router.push("/login");
     }
   }, [router]);
 
@@ -48,7 +48,7 @@ const Sidebar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("authToken");
-    window.location.href = "/admin";
+    window.location.href = "/login";
   };
 
   const menuItems = [

@@ -25,7 +25,7 @@ const useAuth = () => {
       }
     } else {
       // No token → redirect to login
-      router.push('/admin');
+      router.push('/login');
     }
 
     setLoading(false);
@@ -46,7 +46,7 @@ const useAuth = () => {
     localStorage.removeItem('user');
     setToken(null);
     setUser(null);
-    router.push('/admin');
+    router.push('/login');
   };
 
   return {

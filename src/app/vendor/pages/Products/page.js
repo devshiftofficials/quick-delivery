@@ -38,7 +38,7 @@ const VendorProductsPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/admin');
+      router.push('/login');
       return;
     }
 

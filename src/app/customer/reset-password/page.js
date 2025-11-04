@@ -34,7 +34,7 @@ export default function ResetPasswordPage() {
 
       if (res.ok) {
         setStatus('Password reset successful!');
-        setTimeout(() => router.push('/admin'), 3000);
+        setTimeout(() => router.push('/login'), 3000);
       } else {
         setStatus(data.message || 'Failed to reset password');
       }

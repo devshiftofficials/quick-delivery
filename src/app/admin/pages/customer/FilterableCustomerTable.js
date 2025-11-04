@@ -60,6 +60,7 @@ import {
   InputLabel,
   Collapse,
 } from '@mui/material';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 
 const FilterableCustomerTable = ({ customers, fetchCustomers }) => {
   const [filter, setFilter] = useState('');
@@ -337,43 +338,7 @@ const FilterableCustomerTable = ({ customers, fetchCustomers }) => {
       }}
     >
       {/* Loading Overlay */}
-      {isLoading && (
-        <Fade in={isLoading}>
-        <Box
-          sx={{
-            position: 'fixed',
-            inset: 0,
-            display: 'flex',
-              flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-              bgcolor: 'rgba(0, 0, 0, 0.7)',
-              backdropFilter: 'blur(4px)',
-              zIndex: 2000,
-          }}
-        >
-            <CircularProgress 
-              size={60} 
-              sx={{ 
-                color: '#6366f1',
-                mb: 2,
-              }} 
-            />
-            <Typography 
-              sx={{ 
-                color: 'white', 
-                fontSize: '1.2rem',
-                fontWeight: 600,
-                background: 'linear-gradient(45deg, #ffffff 30%, #e0e0e0 90%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Loading...
-            </Typography>
-        </Box>
-        </Fade>
-      )}
+      {isLoading && <BeautifulLoader message="Loading..." />}
 
       {/* Main Content */}
       <Fade in timeout={800}>

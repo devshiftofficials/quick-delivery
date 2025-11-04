@@ -57,6 +57,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { getImageUrl } from '../../../util/imageUrl';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 
 export default function VendorsAdminPage() {
   const [vendors, setVendors] = useState([]);
@@ -263,26 +264,7 @@ export default function VendorsAdminPage() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'white', p: 3 }}>
       {/* Loading Overlay */}
-      {loading && (
-        <Box
-          sx={{
-            position: 'fixed',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: 'rgba(0, 0, 0, 0.7)',
-            zIndex: 9999,
-            backdropFilter: 'blur(4px)',
-          }}
-        >
-          <CircularProgress size={60} sx={{ color: '#6366f1', mb: 2 }} />
-          <Typography sx={{ color: 'white', fontSize: '1.1rem', fontWeight: 600 }}>
-            Processing...
-          </Typography>
-        </Box>
-      )}
+      {loading && <BeautifulLoader message="Processing..." />}
 
       {/* Main Content */}
       <Fade in timeout={600}>

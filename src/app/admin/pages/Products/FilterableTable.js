@@ -53,6 +53,7 @@ import {
   ChevronUp,
   Image as ImageIcon,
 } from 'lucide-react';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
@@ -473,25 +474,7 @@ const FilterableTable = ({
       </Dialog>
 
       {/* Loading Overlay */}
-      {isLoading && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            bgcolor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            backdropFilter: 'blur(4px)',
-          }}
-        >
-          <CircularProgress size={60} sx={{ color: '#6366f1' }} />
-        </Box>
-      )}
+      {isLoading && <BeautifulLoader message="Processing..." />}
 
       {/* Main Content */}
       <Fade in timeout={800}>

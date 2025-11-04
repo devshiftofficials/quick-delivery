@@ -102,7 +102,7 @@ const RegisterPage = () => {
       if (response.ok && data.status) {
         setSnackbar({ open: true, message: 'Registration successful! Please check your email to verify your account.', severity: 'success' });
         toast.success('Registration successful! Please check your email to verify your account.');
-        setTimeout(() => router.push('/admin'), 3000);
+        setTimeout(() => router.push('/login'), 3000);
       } else {
         const errorMsg = data.message || 'Failed to register. Please try again.';
         setSnackbar({ open: true, message: errorMsg, severity: 'error' });
@@ -146,7 +146,7 @@ const RegisterPage = () => {
           <CardContent sx={{ p: 4 }}>
             <Grow in timeout={1000}>
               <Box sx={{ textAlign: 'center', mb: 4 }}>
-                <Button startIcon={<ArrowLeft size={20} />} onClick={() => router.push('/admin')}
+                <Button startIcon={<ArrowLeft size={20} />} onClick={() => router.push('/login')}
                   sx={{ position: 'absolute', top: 16, left: 16, color: '#64748b', textTransform: 'none',
                     '&:hover': { background: 'rgba(99, 102, 241, 0.1)' },
                   }}>Back to Login</Button>
@@ -267,7 +267,7 @@ const RegisterPage = () => {
                   <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2" sx={{ color: '#64748b' }}>
                       Already have an account?{' '}
-                      <Button onClick={() => router.push('/admin')} sx={{
+                      <Button onClick={() => router.push('/login')} sx={{
                         color: '#6366f1', textTransform: 'none', fontWeight: 600, p: 0, minWidth: 'auto',
                         '&:hover': { background: 'transparent', textDecoration: 'underline' },
                       }}>Sign In</Button>

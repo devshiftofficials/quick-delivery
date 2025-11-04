@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { ThreeDots } from 'react-loader-spinner';
+import BeautifulLoader from '../../components/BeautifulLoader';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../../store/cartSlice';
 
@@ -49,18 +49,7 @@ const DiscountedProducts = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
-          color="#3498db"
-          ariaLabel="three-dots-loading"
-          visible={true}
-        />
-      </div>
-    );
+    return <BeautifulLoader message="Loading discounted products..." />;
   }
 
   return (

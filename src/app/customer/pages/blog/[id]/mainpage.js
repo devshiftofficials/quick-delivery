@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import RelatedBlogs from '../../../components/RelatedBlogs';
-import { ThreeDots } from 'react-loader-spinner';
+import BeautifulLoader from '../../../../components/BeautifulLoader';
 import Image from 'next/image';
 
 const BlogDetailPage = ({ id }) => {
@@ -32,18 +32,7 @@ const BlogDetailPage = ({ id }) => {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
-          color="#3498db"
-          ariaLabel="three-dots-loading"
-          visible={true}
-        />
-      </div>
-    );
+    return <BeautifulLoader message="Loading blog..." />;
   }
 
   if (error) {

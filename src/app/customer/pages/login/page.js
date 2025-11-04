@@ -8,7 +8,7 @@ export default function CustomerLoginRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/admin');
+    router.push('/login');
   }, [router]);
 
   return (

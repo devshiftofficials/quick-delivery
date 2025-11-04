@@ -49,7 +49,7 @@ const Header = () => {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
-      router.push('/admin');
+      router.push('/login');
     }
   }, [router]);
 
@@ -66,7 +66,7 @@ const Header = () => {
     localStorage.removeItem('role');
     localStorage.removeItem('authToken');
     handleMenuClose();
-    router.push('/admin');
+    router.push('/login');
   };
 
   // Render nothing until authentication status is known

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { ThreeDots } from 'react-loader-spinner'; // Import the loading spinner
+import BeautifulLoader from '../../../../components/BeautifulLoader';
 import Image from 'next/image';
 
 // Function to fetch subcategories by category slug
@@ -58,11 +58,7 @@ const CategoryPage = ({ categoryData }) => {
 
   // Display loading spinner when data is still being fetched
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots height="80" width="80" radius="9" color="#3498db" ariaLabel="three-dots-loading" visible={true} />
-      </div>
-    );
+    return <BeautifulLoader message="Loading category..." />;
   }
 
   if (error) {

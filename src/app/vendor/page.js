@@ -12,7 +12,7 @@ const VendorLoginPage = () => {
       router.push('/vendor/pages/Main');
     } else {
       // Redirect to unified login page
-      router.push('/admin');
+      router.push('/login');
     }
   }, [router]);
 

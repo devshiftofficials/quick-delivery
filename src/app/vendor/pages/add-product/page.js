@@ -147,7 +147,7 @@ const AddProductPage = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/admin');
+        router.push('/login');
         return;
       }
       const response = await fetch(`/api/products/vendor/${id}`, {
@@ -254,7 +254,7 @@ const AddProductPage = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/admin');
+        router.push('/login');
         return;
       }
 

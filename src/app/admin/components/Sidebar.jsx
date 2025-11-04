@@ -72,7 +72,7 @@ const Sidebar = ({ setActiveComponent }) => {
   useEffect(() => {
     const token = Cookies.get("token") || localStorage.getItem("token");
     if (!token) {
-      router.push("/admin");
+      router.push("/login");
     }
   }, [router]);
 
@@ -87,7 +87,7 @@ const Sidebar = ({ setActiveComponent }) => {
     Cookies.remove("token");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    window.location.href = "/admin";
+    window.location.href = "/login";
   };
 
   return (

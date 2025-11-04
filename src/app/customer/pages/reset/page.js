@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
         toast.success('Password reset successful!');
 
         // Redirect to unified login page
-        setTimeout(() => router.push('/admin'), 3000);
+        setTimeout(() => router.push('/login'), 3000);
       } else {
         toast.error(data.message || 'Failed to reset password');
       }

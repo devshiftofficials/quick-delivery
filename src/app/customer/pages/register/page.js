@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
-import { ThreeDots } from 'react-loader-spinner';
+import BeautifulLoader from '../../components/BeautifulLoader';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
@@ -109,7 +109,7 @@ const Register = () => {
       if (response.ok) {
         toast.success('User registered successfully! Please check your email to verify your account.');
         setTimeout(() => {
-          router.push('/admin');
+          router.push('/login');
         }, 3000); // Redirect to login after 3 seconds
       } else {
         toast.error(`Error: ${data.message || 'Failed to register user'}`);
@@ -255,7 +255,7 @@ const Register = () => {
         <div className="mt-4 text-center">
           <p className="text-gray-700">Already have an account?</p>
           <button
-            onClick={() => router.push('/admin')}
+            onClick={() => router.push('/login')}
             className="mt-2 py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             disabled={loading}
           >
@@ -265,19 +265,7 @@ const Register = () => {
       </form>
 
       {/* Loading Spinner */}
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#ffffff"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            visible={true}
-          />
-        </div>
-      )}
+      {loading && <BeautifulLoader message="Registering..." />}
 
       <ToastContainer />
     </div>

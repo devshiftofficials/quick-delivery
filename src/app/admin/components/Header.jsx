@@ -48,7 +48,7 @@ const Header = () => {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
-      router.push('/admin');
+      router.push('/login');
     }
   }, [router]);
 

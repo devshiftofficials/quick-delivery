@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import TopCategories from './customer/components/TopCategories';
 import Slider from './customer/components/Carousel';
 import Customerlayout from './customer/layout';
+import BeautifulLoader from './components/BeautifulLoader';
 
 const Products = dynamic(() => import('./customer/components/Products'), { ssr: true });
 const Features = dynamic(() => import('./customer/components/Features'), { ssr: true });
@@ -38,17 +39,7 @@ export default function CustomerPage() {
 
   // Show loading while checking authentication
   if (isChecking) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-      }}>
-        <p style={{ color: 'white', fontSize: '1.1rem' }}>Loading...</p>
-      </div>
-    );
+    return <BeautifulLoader message="Loading..." />;
   }
 
   return (

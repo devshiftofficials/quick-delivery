@@ -35,7 +35,7 @@ export default function VendorHome() {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          window.location.href = '/admin';
+          window.location.href = '/login';
           return;
         }
 
