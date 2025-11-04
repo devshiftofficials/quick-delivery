@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import BeautifulLoader from '../../components/BeautifulLoader';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../../store/cartSlice';
 

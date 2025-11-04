@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import BeautifulLoader from '../../components/BeautifulLoader';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 import { EyeIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 

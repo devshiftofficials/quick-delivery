@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import BeautifulLoader from '../../components/BeautifulLoader';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 import { useDispatch } from 'react-redux';
 import { addToCart, setCart } from '../../../store/cartSlice';
 import { useRouter } from 'next/navigation';

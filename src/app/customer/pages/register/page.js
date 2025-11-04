@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
-import BeautifulLoader from '../../components/BeautifulLoader';
+import BeautifulLoader from '../../../components/BeautifulLoader';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {

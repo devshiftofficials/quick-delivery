@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { addToCart, setCart } from '../../../../store/cartSlice';
-import BeautifulLoader from '../../../components/BeautifulLoader';
+import BeautifulLoader from '../../../../components/BeautifulLoader';
 import Modal from 'react-modal';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
