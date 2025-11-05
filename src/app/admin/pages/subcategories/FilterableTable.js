@@ -51,7 +51,7 @@ import {
   Calendar,
   ArrowRight,
 } from 'lucide-react';
-import BeautifulLoader from '../../../components/BeautifulLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
 
 const FilterableTable = ({ subcategories = [], fetchSubcategories, categories = [] }) => {
   const [filter, setFilter] = useState('');
@@ -60,6 +60,8 @@ const FilterableTable = ({ subcategories = [], fetchSubcategories, categories = 
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Processing...');
+  const [loadingType, setLoadingType] = useState('loading'); // 'loading', 'success', 'error'
   const [categoriesList, setCategoriesList] = useState([]);
   const [newSubcategory, setNewSubcategory] = useState({
     name: '',
@@ -195,19 +197,39 @@ const FilterableTable = ({ subcategories = [], fetchSubcategories, categories = 
       const result = await response.json();
 
       if (response.ok) {
+        setLoadingMessage(editingSubcategorySlug ? 'Subcategory updated successfully!' : 'Subcategory added successfully!');
+        setLoadingType('success');
         fetchSubcategories();
         resetForm();
         if (imagePreview) {
           URL.revokeObjectURL(imagePreview);
         }
         setImagePreview(null);
+        setTimeout(() => {
+          setIsLoading(false);
+          setLoadingType('loading');
+          setLoadingMessage('Processing...');
+        }, 2000);
       } else {
         console.error('Failed to add/update subcategory:', result.message);
+        setLoadingMessage('Failed to save subcategory. Please try again.');
+        setLoadingType('error');
+        setTimeout(() => {
+          setIsLoading(false);
+          setLoadingType('loading');
+          setLoadingMessage('Processing...');
+        }, 2000);
       }
     } catch (error) {
       console.error('Error adding or updating subcategory:', error);
+      setLoadingMessage('Failed to save subcategory. Please try again.');
+      setLoadingType('error');
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     }
-    setIsLoading(false);
   };
 
   const handleDeleteItem = async (slug) => {
@@ -225,11 +247,24 @@ const FilterableTable = ({ subcategories = [], fetchSubcategories, categories = 
         throw new Error('Failed to delete subcategory');
       }
 
+      setLoadingMessage('Subcategory deleted successfully!');
+      setLoadingType('success');
       fetchSubcategories();
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     } catch (error) {
       console.error('Error deleting subcategory:', error);
+      setLoadingMessage('Failed to delete subcategory. Please try again.');
+      setLoadingType('error');
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     }
-    setIsLoading(false);
   };
 
   const handleEditItem = (item) => {
@@ -345,7 +380,11 @@ const FilterableTable = ({ subcategories = [], fetchSubcategories, categories = 
       }}
     >
       {/* Loading Overlay */}
-      {isLoading && <BeautifulLoader message="Processing..." />}
+      <LoadingDialog 
+        open={isLoading} 
+        message={loadingMessage} 
+        type={loadingType}
+      />
 
       {/* Main Content */}
       <Fade in timeout={600}>

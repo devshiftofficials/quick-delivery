@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import FilterableCouponTable from './FilterableCouponTable';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
 
 const CouponsPage = () => {
   const [coupons, setCoupons] = useState([]);
@@ -28,24 +29,7 @@ const CouponsPage = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          bgcolor: 'white',
-          gap: 2,
-        }}
-      >
-        <CircularProgress size={60} sx={{ color: '#ff5900' }} />
-        <Typography variant="h6" sx={{ color: '#ff5900', fontWeight: 600 }}>
-          Loading Coupons...
-        </Typography>
-      </Box>
-    );
+    return <PageLoader message="Loading Coupons..." />;
   }
 
   return (

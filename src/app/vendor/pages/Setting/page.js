@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import VendorLayout from '../layout';
 import { Box, Container, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
 // Lucide Icons
 import { Edit, Settings } from 'lucide-react';
 
@@ -10,6 +12,7 @@ const VendorSettingPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editSetting, setEditSetting] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [settingForm, setSettingForm] = useState({
     deliveryCharge: '',
     taxPercentage: '',
@@ -23,11 +26,14 @@ const VendorSettingPage = () => {
 
   const fetchSettings = async () => {
     try {
+      setIsInitialLoading(true);
       const response = await fetch('/api/settings');
       const data = await response.json();
       setSettings(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching settings:', error);
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
@@ -81,8 +87,17 @@ const VendorSettingPage = () => {
     }
   };
 
+  if (isInitialLoading) {
+    return <PageLoader message="Loading Settings..." />;
+  }
+
   return (
     <VendorLayout>
+      <LoadingDialog 
+        open={isLoading} 
+        message="Processing..." 
+        type="loading"
+      />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
         <Container maxWidth="xl" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
           <Typography

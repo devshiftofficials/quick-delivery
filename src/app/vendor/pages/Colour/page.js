@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import VendorLayout from '../layout';
 import { Box, Container, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
 // Lucide Icons
 import { Plus, Edit, Trash2, Palette } from 'lucide-react';
 
@@ -10,6 +12,7 @@ const VendorColourPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentColor, setCurrentColor] = useState({ id: null, name: '', hex: '#000000' });
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
     fetchColors();
@@ -17,12 +20,15 @@ const VendorColourPage = () => {
 
   const fetchColors = async () => {
     try {
+      setIsInitialLoading(true);
       const response = await fetch('/api/colors');
       const data = await response.json();
       setColors(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching colors:', error);
       setColors([]);
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
@@ -66,8 +72,17 @@ const VendorColourPage = () => {
     }
   };
 
+  if (isInitialLoading) {
+    return <PageLoader message="Loading Colors..." />;
+  }
+
   return (
     <VendorLayout>
+      <LoadingDialog 
+        open={isLoading} 
+        message="Processing..." 
+        type="loading"
+      />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
         <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>

@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import FilterableTable from './FilterableTable';
+import PageLoader from '../../../components/PageLoader';
 
 const TopRatedProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -22,15 +23,13 @@ const TopRatedProductsPage = () => {
     fetchTopRatedProducts();
   }, []);
 
+  if (isLoading) {
+    return <PageLoader message="Loading Top Rated Products..." />;
+  }
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-xl text-gray-700">Loading...</div>
-        </div>
-      ) : (
-        <FilterableTable products={products} />
-      )}
+      <FilterableTable products={products} />
     </div>
   );
 };

@@ -13,8 +13,8 @@ import {
   CardContent,
   Fade,
   Grow,
-  CircularProgress,
 } from "@mui/material";
+import PageLoader from '../../../components/PageLoader';
 import { Business as BusinessIcon, Image as ImageIcon } from '@mui/icons-material';
 
 const CompanyDetailsPage = () => {
@@ -160,19 +160,7 @@ const CompanyDetailsPage = () => {
   };
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: '#f5f7fa',
-        }}
-      >
-        <CircularProgress sx={{ color: '#ff5900' }} />
-      </Box>
-    );
+    return <PageLoader message="Loading Company Details..." />;
   }
 
   return (

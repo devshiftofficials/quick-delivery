@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import FilterableDiscountedTable from './FilterableTable.js';
+import PageLoader from '../../../components/PageLoader';
 
 const DiscountedProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -22,15 +23,13 @@ const DiscountedProductsPage = () => {
     fetchDiscountedProducts();
   }, []);
 
+  if (isLoading) {
+    return <PageLoader message="Loading Discounted Products..." />;
+  }
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-xl text-gray-700">Loading...</div>
-        </div>
-      ) : (
-        <FilterableDiscountedTable products={products} />
-      )}
+      <FilterableDiscountedTable products={products} />
     </div>
   );
 };

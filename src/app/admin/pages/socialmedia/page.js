@@ -1,11 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  CircularProgress,
-  Typography,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import FilterableSocialMediaTable from './FilterableSocialMediaTable';
+import PageLoader from '../../../components/PageLoader';
 
 export default function SocialMediaPage() {
   const [loading, setLoading] = useState(true);
@@ -33,24 +30,7 @@ export default function SocialMediaPage() {
   }, []);
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          bgcolor: 'white',
-          gap: 2,
-        }}
-      >
-        <CircularProgress size={60} sx={{ color: '#ff5900' }} />
-        <Typography variant="h6" sx={{ color: '#ff5900', fontWeight: 600 }}>
-          Loading Social Media...
-        </Typography>
-      </Box>
-    );
+    return <PageLoader message="Loading Social Media..." />;
   }
 
   return (

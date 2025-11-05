@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
 import VendorLayout from '../layout';
+import PageLoader from '../../../components/PageLoader';
 
 // MUI Imports
 import {
@@ -119,6 +120,10 @@ export default function VendorHome() {
       iconColor: '#EF4444',
     },
   ];
+
+  if (loading) {
+    return <PageLoader message="Loading Dashboard..." />;
+  }
 
   return (
     <VendorLayout>

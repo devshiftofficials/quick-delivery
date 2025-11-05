@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import FilterableTable from './FilterableTable';
+import PageLoader from '../../../components/PageLoader';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -8,6 +9,7 @@ const ProductPage = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchProducts = async () => {
     try {
@@ -78,12 +80,23 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-    fetchSubcategories();
-    fetchColors();
-    fetchSizes();
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchProducts(),
+        fetchCategories(),
+        fetchSubcategories(),
+        fetchColors(),
+        fetchSizes()
+      ]);
+      setIsLoading(false);
+    };
+    fetchAllData();
   }, []);
+
+  if (isLoading) {
+    return <PageLoader message="Loading Products..." />;
+  }
 
   return (
     <FilterableTable

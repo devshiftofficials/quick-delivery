@@ -15,8 +15,8 @@ import {
   CardContent,
   Fade,
   Grow,
-  CircularProgress,
 } from "@mui/material";
+import PageLoader from '../../../components/PageLoader';
 // Lucide Icons
 import { Building2, Image as ImageIcon } from 'lucide-react';
 
@@ -163,21 +163,7 @@ const VendorCompanyDetailsPage = () => {
   };
 
   if (loading) {
-    return (
-      <VendorLayout>
-        <Box
-          sx={{
-            minHeight: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: '#f8fafc',
-          }}
-        >
-          <CircularProgress sx={{ color: '#6366f1' }} />
-        </Box>
-      </VendorLayout>
-    );
+    return <PageLoader message="Loading Company Details..." />;
   }
 
   return (

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 // import FilterableTable from './components/FilterableTable';
 import FilterableTable from './FilterableTable';
+import PageLoader from '../../../components/PageLoader';
 
 const BranchesPage = () => {
   const [data, setData] = useState([]);
@@ -23,13 +24,13 @@ const BranchesPage = () => {
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return <PageLoader message="Loading Branches..." />;
+  }
+
   return (
     <div className="container mx-auto p-4">
-      {isLoading ? (
-        <div className="text-center text-2xl">Loading...</div>
-      ) : (
-        <FilterableTable data={data} fetchData={fetchData} />
-      )}
+      <FilterableTable data={data} fetchData={fetchData} />
     </div>
   );
 };

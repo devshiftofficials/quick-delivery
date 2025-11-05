@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import VendorLayout from '../layout';
 import { Box, Container, Typography, Grid, Paper, Button, Fade, Slide } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
 // Lucide Icons
 import { Plus, Tag, Folder, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -45,6 +46,10 @@ const VendorDashboard = () => {
     }
     fetchData();
   }, [router]);
+
+  if (loading) {
+    return <PageLoader message="Loading Dashboard..." />;
+  }
 
   return (
     <VendorLayout>

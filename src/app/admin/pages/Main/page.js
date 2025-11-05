@@ -30,6 +30,7 @@ import {
   Grow,
   Skeleton,
 } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
 // Lucide Icons
 import {
   Package as InventoryIcon,
@@ -217,6 +218,10 @@ export default function Home() {
   useEffect(() => {
     fetchData(startDate, endDate);
   }, [startDate, endDate]);
+
+  if (loading && !statsData) {
+    return <PageLoader message="Loading Dashboard..." />;
+  }
 
   const handleFilter = () => {
     if (startDate && endDate) {

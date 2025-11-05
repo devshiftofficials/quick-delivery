@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import VendorLayout from '../layout';
 import { Box, Container, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, CircularProgress } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
 // Lucide Icons
 import { Plus, Edit, Trash2, Ruler } from 'lucide-react';
 
@@ -10,6 +12,7 @@ const VendorSizePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSize, setCurrentSize] = useState({ id: null, name: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
     fetchSizes();
@@ -17,12 +20,15 @@ const VendorSizePage = () => {
 
   const fetchSizes = async () => {
     try {
+      setIsInitialLoading(true);
       const response = await fetch('/api/sizes');
       const data = await response.json();
       setSizes(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching sizes:', error);
       setSizes([]);
+    } finally {
+      setIsInitialLoading(false);
     }
   };
 
@@ -66,8 +72,17 @@ const VendorSizePage = () => {
     }
   };
 
+  if (isInitialLoading) {
+    return <PageLoader message="Loading Sizes..." />;
+  }
+
   return (
     <VendorLayout>
+      <LoadingDialog 
+        open={isLoading} 
+        message="Processing..." 
+        type="loading"
+      />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
         <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>

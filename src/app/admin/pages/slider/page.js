@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Box, CircularProgress, Fade } from '@mui/material';
+import { Box, Fade } from '@mui/material';
 import FilterableSliderTable from './filterabletable';
+import PageLoader from '../../../components/PageLoader';
 
 const SliderPage = () => {
   const [data, setData] = useState([]);
@@ -27,19 +28,7 @@ const SliderPage = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: '#f5f7fa',
-        }}
-      >
-        <CircularProgress sx={{ color: '#ff5900' }} />
-      </Box>
-    );
+    return <PageLoader message="Loading Sliders..." />;
   }
 
   return (

@@ -16,6 +16,7 @@ import {
   Grow,
   InputAdornment,
 } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
 // Lucide Icons
 import { Mail, Phone, MapPin, Globe, User, MessageCircle } from 'lucide-react';
 
@@ -28,11 +29,13 @@ const VendorContactInfoPage = () => {
     owner: '',
   });
   const [contactInfo, setContactInfo] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     async function fetchContactInfo() {
+      setIsInitialLoading(true);
       setIsLoading(true);
       try {
         const response = await axios.get('/api/contactinfo');
@@ -51,6 +54,7 @@ const VendorContactInfoPage = () => {
         console.error('Error fetching contact info:', error);
       } finally {
         setIsLoading(false);
+        setIsInitialLoading(false);
       }
     }
     fetchContactInfo();
@@ -91,6 +95,10 @@ const VendorContactInfoPage = () => {
     { name: 'website', label: 'Website', icon: Globe },
     { name: 'owner', label: 'Owner', icon: User },
   ];
+
+  if (isInitialLoading) {
+    return <PageLoader message="Loading Contact Information..." />;
+  }
 
   return (
     <VendorLayout>

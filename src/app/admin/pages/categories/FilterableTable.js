@@ -46,7 +46,8 @@ import {
   CheckCircle2,
   Calendar,
 } from 'lucide-react';
-import BeautifulLoader from '../../../components/BeautifulLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
+import PageLoader from '../../../components/PageLoader';
 
 const FilterableTable = () => {
   const [filter, setFilter] = useState('');
@@ -56,6 +57,9 @@ const FilterableTable = () => {
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState('Processing...');
+  const [loadingType, setLoadingType] = useState('loading'); // 'loading', 'success', 'error'
   const [newCategory, setNewCategory] = useState({
     slug: '',
     name: '',
@@ -80,7 +84,6 @@ const FilterableTable = () => {
   }, []);
 
   const fetchCategories = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch('/api/categories');
       if (!response.ok) {
@@ -90,12 +93,13 @@ const FilterableTable = () => {
       const categories = data.data || data || [];
       setOriginalData(categories);
       setFilteredData(categories);
+      setIsInitialLoading(false);
     } catch (error) {
       console.error('Error fetching categories:', error);
       setOriginalData([]);
       setFilteredData([]);
+      setIsInitialLoading(false);
     }
-    setIsLoading(false);
   };
 
   // Apply filters
@@ -191,11 +195,24 @@ const FilterableTable = () => {
       }
       setImagePreview(null);
       setEditingCategorySlug(null); // Reset edit mode
+      setLoadingMessage(editingCategorySlug ? 'Category updated successfully!' : 'Category added successfully!');
+      setLoadingType('success');
       fetchCategories();
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     } catch (error) {
       console.error('Error adding or updating item:', error);
+      setLoadingMessage('Failed to save category. Please try again.');
+      setLoadingType('error');
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     }
-    setIsLoading(false);
   };
 
   const handleDeleteItem = async (slug) => {
@@ -213,11 +230,24 @@ const FilterableTable = () => {
         throw new Error(`Failed to delete category with slug: ${slug}`);
       }
 
+      setLoadingMessage('Category deleted successfully!');
+      setLoadingType('success');
       fetchCategories();
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     } catch (error) {
       console.error('Error deleting item:', error);
+      setLoadingMessage('Failed to delete category. Please try again.');
+      setLoadingType('error');
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingType('loading');
+        setLoadingMessage('Processing...');
+      }, 2000);
     }
-    setIsLoading(false);
   };
 
   const handleEditItem = (item) => {
@@ -317,6 +347,11 @@ const FilterableTable = () => {
     return `${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${imageUrl}`;
   };
 
+  // Show page loader on initial load
+  if (isInitialLoading) {
+    return <PageLoader message="Loading Categories..." />;
+  }
+
   return (
     <Box
       sx={{
@@ -326,7 +361,11 @@ const FilterableTable = () => {
       }}
     >
       {/* Loading Overlay */}
-      {isLoading && <BeautifulLoader message="Processing..." />}
+      <LoadingDialog 
+        open={isLoading} 
+        message={loadingMessage} 
+        type={loadingType}
+      />
 
       {/* Main Content */}
       <Fade in timeout={600}>

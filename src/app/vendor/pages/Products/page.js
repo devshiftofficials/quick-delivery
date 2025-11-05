@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import VendorLayout from '../layout';
 import { useRouter } from 'next/navigation';
 import jwt from 'jsonwebtoken';
+import PageLoader from '../../../components/PageLoader';
 
 // MUI Imports
 import {
@@ -34,6 +35,7 @@ const VendorProductsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -62,6 +64,7 @@ const VendorProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem('token');
       const response = await fetch('/api/products/vendor/me', {
         headers: {
@@ -86,6 +89,8 @@ const VendorProductsPage = () => {
       console.error('Error fetching products:', error);
       setError('Unable to connect to database. Please check your connection.');
       setProducts([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,6 +128,10 @@ const VendorProductsPage = () => {
   };
 
   const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  if (isLoading) {
+    return <PageLoader message="Loading Products..." />;
+  }
 
   return (
     <VendorLayout>

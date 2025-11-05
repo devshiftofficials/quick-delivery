@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react';
 import FilterableTable from './FilterableTable';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import PageLoader from '../../../components/PageLoader';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -36,24 +37,7 @@ const OrdersPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-          gap: 2,
-        }}
-      >
-        <CircularProgress size={60} sx={{ color: '#ff5900' }} />
-        <Typography variant="h6" sx={{ color: '#ff5900', fontWeight: 600 }}>
-          Loading Orders...
-        </Typography>
-      </Box>
-    );
+    return <PageLoader message="Loading Orders..." />;
   }
 
   return (

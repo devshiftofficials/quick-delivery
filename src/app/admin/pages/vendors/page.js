@@ -57,7 +57,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { getImageUrl } from '../../../util/imageUrl';
-import BeautifulLoader from '../../../components/BeautifulLoader';
+import LoadingDialog from '../../../components/LoadingDialog';
 
 export default function VendorsAdminPage() {
   const [vendors, setVendors] = useState([]);
@@ -264,7 +264,11 @@ export default function VendorsAdminPage() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'white', p: 3 }}>
       {/* Loading Overlay */}
-      {loading && <BeautifulLoader message="Processing..." />}
+      <LoadingDialog 
+        open={loading} 
+        message="Processing..." 
+        type="loading"
+      />
 
       {/* Main Content */}
       <Fade in timeout={600}>

@@ -3,15 +3,21 @@ import React, { useState, useEffect } from 'react';
 import VendorLayout from '../layout';
 import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Image from 'next/image';
+import PageLoader from '../../../components/PageLoader';
 
 const VendorCategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories();
-    fetchSubcategories();
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchCategories(), fetchSubcategories()]);
+      setIsLoading(false);
+    };
+    fetchAllData();
   }, []);
 
   const fetchCategories = async () => {
@@ -57,6 +63,10 @@ const VendorCategoriesPage = () => {
         ? subcategories.filter((sub) => sub.categoryId === selectedCategory.id)
         : subcategories)
     : [];
+
+  if (isLoading) {
+    return <PageLoader message="Loading Categories..." />;
+  }
 
   return (
     <VendorLayout>

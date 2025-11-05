@@ -9,7 +9,6 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Badge,
   Box,
   Avatar,
   Menu,
@@ -19,25 +18,29 @@ import {
   TextField,
   InputAdornment,
   Grow,
+  Chip,
+  Divider,
+  Badge,
 } from '@mui/material';
 // Lucide Icons
 import {
-  Bell,
-  MessageCircle,
   User,
   Settings,
   LogOut,
   Search,
   X,
+  Menu as MenuIcon,
+  Bell,
+  Mail,
 } from 'lucide-react';
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notificationCount, setNotificationCount] = useState(3);
-  const [mailCount, setMailCount] = useState(2);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(3);
+  const [inboxCount, setInboxCount] = useState(2);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -77,42 +80,13 @@ const Header = () => {
   return (
     <AppBar
       position="static"
+      elevation={0}
       sx={{
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-        boxShadow: '0 4px 20px rgba(99, 102, 241, 0.25), 0 0 40px rgba(99, 102, 241, 0.1)',
+        background: '#ffffff',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)',
         transition: 'all 0.3s ease',
         position: 'relative',
-        overflow: 'hidden',
-        backdropFilter: 'blur(10px)',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%)',
-          pointerEvents: 'none',
-        },
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          top: '-50%',
-          right: '-10%',
-          width: '300px',
-          height: '300px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          animation: 'float 6s ease-in-out infinite',
-          '@keyframes float': {
-            '0%, 100%': { transform: 'translateY(0) translateX(0)' },
-            '50%': { transform: 'translateY(-20px) translateX(10px)' },
-          },
-        },
-        '&:hover': {
-          boxShadow: '0 6px 30px rgba(99, 102, 241, 0.35), 0 0 60px rgba(99, 102, 241, 0.15)',
-        },
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
       }}
     >
       <Toolbar
@@ -120,59 +94,66 @@ const Header = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          px: { xs: 2, md: 4 },
-          py: 1.5,
-          position: 'relative',
-          zIndex: 1,
+          px: { xs: 2, sm: 3, md: 4 },
+          py: 2,
+          minHeight: '72px !important',
           gap: 2,
         }}
       >
         {/* Left Section - Logo */}
-        <Fade in timeout={800}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+        <Fade in timeout={600}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 2, 
+              flexShrink: 0,
+              cursor: 'pointer',
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5,
-                px: 2,
-                py: 1,
-                borderRadius: 2,
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
+                px: 3,
+                py: 1.5,
+                borderRadius: 3,
+                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                border: '1px solid rgba(99, 102, 241, 0.15)',
                 '&:hover': {
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  transform: 'translateX(4px)',
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.12) 100%)',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+                  border: '1px solid rgba(99, 102, 241, 0.25)',
                 },
               }}
             >
               <Typography
                 variant="h5"
                 sx={{
-                  color: 'white',
                   fontWeight: 800,
-                  ml: 1,
-                  fontSize: { xs: '1.1rem', md: '1.5rem' },
-                  letterSpacing: 1,
-                  background: 'linear-gradient(45deg, #ffffff 30%, #e0e0e0 90%)',
+                  fontSize: { xs: '1.2rem', md: '1.6rem' },
+                  letterSpacing: '0.5px',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  textShadow: '0 2px 10px rgba(255,255,255,0.3)',
+                  backgroundClip: 'text',
                 }}
               >
-              QuickDelivery
-            </Typography>
+                QuickDelivery
+              </Typography>
+            </Box>
           </Box>
-        </Box>
         </Fade>
 
         {/* Center Section - Search Bar */}
-        <Grow in timeout={1000}>
+        <Grow in timeout={800}>
           <Box
             sx={{
               flex: 1,
-              maxWidth: { xs: '200px', sm: '400px', md: '500px' },
+              maxWidth: { xs: '180px', sm: '350px', md: '500px', lg: '600px' },
               display: { xs: 'none', sm: 'block' },
             }}
           >
@@ -188,9 +169,10 @@ const Header = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Search
-                      size={18}
+                      size={20}
+                      strokeWidth={2.5}
                       style={{
-                        color: isSearchFocused ? 'white' : 'rgba(255, 255, 255, 0.7)',
+                        color: isSearchFocused ? '#6366f1' : '#94a3b8',
                         transition: 'all 0.3s ease',
                       }}
                     />
@@ -202,10 +184,10 @@ const Header = () => {
                       size="small"
                       onClick={() => setSearchQuery('')}
                       sx={{
-                        color: 'rgba(255, 255, 255, 0.7)',
+                        color: '#94a3b8',
                         '&:hover': {
-                          color: 'white',
-                          background: 'rgba(255, 255, 255, 0.1)',
+                          color: '#6366f1',
+                          background: 'rgba(99, 102, 241, 0.08)',
                         },
                       }}
                     >
@@ -216,27 +198,29 @@ const Header = () => {
               }}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  background: isSearchFocused
-                    ? 'rgba(255, 255, 255, 0.2)'
-                    : 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(10px)',
-                  color: 'white',
+                  background: isSearchFocused ? '#ffffff' : '#f8fafc',
                   borderRadius: 3,
                   transition: 'all 0.3s ease',
                   border: `1px solid ${
-                    isSearchFocused ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.1)'
+                    isSearchFocused ? 'rgba(99, 102, 241, 0.3)' : 'rgba(0, 0, 0, 0.08)'
                   }`,
+                  boxShadow: isSearchFocused 
+                    ? '0 2px 8px rgba(99, 102, 241, 0.12)' 
+                    : 'none',
                   '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: '#ffffff',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                    boxShadow: '0 2px 6px rgba(99, 102, 241, 0.08)',
                   },
                   '& fieldset': {
                     border: 'none',
                   },
                   '& input': {
-                    color: 'white',
+                    color: '#1e293b',
+                    fontSize: '0.95rem',
+                    padding: '10px 14px',
                     '&::placeholder': {
-                      color: 'rgba(255, 255, 255, 0.6)',
+                      color: '#94a3b8',
                       opacity: 1,
                     },
                   },
@@ -247,23 +231,34 @@ const Header = () => {
         </Grow>
 
         {/* Right Section */}
-        <Fade in timeout={1200}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 }, flexShrink: 0 }}>
+        <Fade in timeout={1000}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: { xs: 1, sm: 2 }, 
+              flexShrink: 0 
+            }}
+          >
             {/* Mobile Search Button */}
             <Tooltip title="Search" arrow TransitionComponent={Fade}>
               <IconButton
                 sx={{
-                  color: 'white',
+                  color: '#64748b',
                   display: { xs: 'flex', sm: 'none' },
+                  width: 44,
+                  height: 44,
+                  borderRadius: 2,
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    transform: 'scale(1.1) rotate(90deg)',
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    color: '#6366f1',
+                    transform: 'scale(1.05)',
                   },
                 }}
                 aria-label="search"
               >
-                <Search size={20} />
+                <Search size={22} strokeWidth={2.5} />
               </IconButton>
             </Tooltip>
 
@@ -271,132 +266,168 @@ const Header = () => {
             <Tooltip title="Notifications" arrow TransitionComponent={Fade}>
               <IconButton
                 sx={{
-                  color: 'white',
+                  color: '#64748b',
                   position: 'relative',
+                  width: 44,
+                  height: 44,
+                  borderRadius: 2,
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    transform: 'scale(1.1) rotate(5deg)',
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    color: '#6366f1',
+                    transform: 'scale(1.05)',
                   },
                 }}
                 aria-label="notifications"
               >
                 <Badge
                   badgeContent={notificationCount}
-            color="error"
-                  sx={{
-                    '& .MuiBadge-badge': {
-                      width: 18,
-                      height: 18,
-                      minWidth: 18,
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      animation: 'pulse 2s infinite',
-                      '@keyframes pulse': {
-                        '0%, 100%': {
-                          transform: 'scale(1)',
-                        },
-                        '50%': {
-                          transform: 'scale(1.1)',
-                        },
-                      },
-                    },
-                  }}
-                >
-              <Bell size={20} />
-                </Badge>
-            </IconButton>
-            </Tooltip>
-
-            {/* Messages */}
-            <Tooltip title="Messages" arrow TransitionComponent={Fade}>
-              <IconButton
-                sx={{
-                  color: 'white',
-                  position: 'relative',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    transform: 'scale(1.1) rotate(-5deg)',
-                  },
-                }}
-                aria-label="messages"
-              >
-                <Badge
-                  badgeContent={mailCount}
                   color="error"
+                  overlap="circular"
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
                   sx={{
                     '& .MuiBadge-badge': {
                       width: 18,
                       height: 18,
                       minWidth: 18,
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      animation: 'pulse 2s infinite',
-                      '@keyframes pulse': {
-                        '0%, 100%': {
-                          transform: 'scale(1)',
-                        },
-                        '50%': {
-                          transform: 'scale(1.1)',
-                        },
-                      },
+                      fontSize: '0.65rem',
+                      fontWeight: 600,
+                      padding: 0,
+                      lineHeight: '18px',
+                      boxShadow: '0 2px 6px rgba(239, 68, 68, 0.4)',
+                      top: 2,
+                      right: 2,
                     },
                   }}
                 >
-                  <MessageCircle size={20} strokeWidth={2} />
+                  <Bell size={22} strokeWidth={2.5} />
                 </Badge>
               </IconButton>
             </Tooltip>
 
-            {/* Profile Menu */}
+            {/* Inbox */}
+            <Tooltip title="Inbox" arrow TransitionComponent={Fade}>
+              <IconButton
+                sx={{
+                  color: '#64748b',
+                  position: 'relative',
+                  width: 44,
+                  height: 44,
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    color: '#6366f1',
+                    transform: 'scale(1.05)',
+                  },
+                }}
+                aria-label="inbox"
+              >
+                <Badge
+                  badgeContent={inboxCount}
+                  color="error"
+                  overlap="circular"
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      width: 18,
+                      height: 18,
+                      minWidth: 18,
+                      fontSize: '0.65rem',
+                      fontWeight: 600,
+                      padding: 0,
+                      lineHeight: '18px',
+                      boxShadow: '0 2px 6px rgba(239, 68, 68, 0.4)',
+                      top: 2,
+                      right: 2,
+                    },
+                  }}
+                >
+                  <Mail size={22} strokeWidth={2.5} />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+
+            {/* Profile Section */}
             <Tooltip title="Account Settings" arrow TransitionComponent={Fade}>
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 1,
-                  px: 1.5,
-                  py: 0.5,
+                  gap: 1.5,
+                  px: { xs: 1.5, sm: 2.5 },
+                  py: 1,
                   borderRadius: 3,
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%)',
+                  border: '1px solid rgba(99, 102, 241, 0.12)',
                   '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    transform: 'translateY(-2px)',
+                    background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.1) 100%)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.15)',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
                   },
                 }}
                 onClick={handleMenuOpen}
               >
                 <Avatar
                   sx={{
-                    width: 36,
-                    height: 36,
-                    bgcolor: 'rgba(255, 255, 255, 0.3)',
+                    width: { xs: 36, sm: 40 },
+                    height: { xs: 36, sm: 40 },
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     color: 'white',
-                    fontWeight: 'bold',
-                    border: '2px solid rgba(255, 255, 255, 0.5)',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    border: '2px solid rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 2px 8px rgba(99, 102, 241, 0.25)',
                     transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                      boxShadow: '0 4px 15px rgba(255,255,255,0.3)',
-                    },
                   }}
                 >
                   A
                 </Avatar>
-                <Typography
-                  variant="body2"
+                <Box
                   sx={{
-                    color: 'white',
-                    fontWeight: 600,
-                    display: { xs: 'none', md: 'block' },
+                    display: { xs: 'none', md: 'flex' },
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: 0.25,
                   }}
                 >
-              Admin
-            </Typography>
-          </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#1e293b',
+                      fontWeight: 600,
+                      fontSize: '0.95rem',
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    Admin
+                  </Typography>
+                  <Chip
+                    label="Online"
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: '0.7rem',
+                      fontWeight: 500,
+                      background: 'rgba(34, 197, 94, 0.1)',
+                      color: '#22c55e',
+                      border: 'none',
+                      '& .MuiChip-label': {
+                        padding: '0 6px',
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
             </Tooltip>
 
             {/* Dropdown Menu */}
@@ -416,44 +447,147 @@ const Header = () => {
               PaperProps={{
                 sx: {
                   mt: 1.5,
-                  minWidth: 200,
-                  borderRadius: 2,
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
-                  border: '1px solid rgba(0,0,0,0.05)',
+                  minWidth: 240,
+                  borderRadius: 3,
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.12), 0 2px 10px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                  background: '#ffffff',
+                  overflow: 'hidden',
                   '& .MuiMenuItem-root': {
-                    px: 2,
+                    px: 2.5,
                     py: 1.5,
                     transition: 'all 0.2s ease',
+                    color: '#1e293b',
+                    fontSize: '0.95rem',
+                    fontWeight: 500,
                     '&:hover': {
-                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%)',
                       transform: 'translateX(4px)',
+                      color: '#6366f1',
+                    },
+                    '&:first-of-type': {
+                      borderTopLeftRadius: 12,
+                      borderTopRightRadius: 12,
+                    },
+                    '&:last-of-type': {
+                      borderBottomLeftRadius: 12,
+                      borderBottomRightRadius: 12,
                     },
                   },
                 },
               }}
             >
               <MenuItem onClick={handleMenuClose}>
-                <User size={18} style={{ marginRight: '16px', color: '#6366f1' }} />
-                Profile
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    width: '100%',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <User size={20} style={{ color: '#6366f1' }} strokeWidth={2.5} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      Profile
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem' }}>
+                      View your profile
+                    </Typography>
+                  </Box>
+                </Box>
               </MenuItem>
+              
               <MenuItem onClick={handleMenuClose}>
-                <Settings size={18} style={{ marginRight: '16px', color: '#6366f1' }} />
-                Settings
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    width: '100%',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Settings size={20} style={{ color: '#6366f1' }} strokeWidth={2.5} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      Settings
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem' }}>
+                      Manage preferences
+                    </Typography>
+                  </Box>
+                </Box>
               </MenuItem>
+
+              <Divider sx={{ my: 0.5 }} />
+
               <MenuItem
                 onClick={handleLogout}
                 sx={{
                   color: '#ef4444',
                   '&:hover': {
-                    background: 'rgba(239, 68, 68, 0.1)',
+                    background: 'rgba(239, 68, 68, 0.08)',
+                    color: '#dc2626',
                   },
                 }}
               >
-                <LogOut size={18} style={{ marginRight: '16px' }} />
-                Logout
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    width: '100%',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <LogOut size={20} style={{ color: '#ef4444' }} strokeWidth={2.5} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      Logout
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem' }}>
+                      Sign out of your account
+                    </Typography>
+                  </Box>
+                </Box>
               </MenuItem>
             </Menu>
-        </Box>
+          </Box>
         </Fade>
       </Toolbar>
     </AppBar>
