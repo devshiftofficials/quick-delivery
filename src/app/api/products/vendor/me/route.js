@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import prisma from '../../../../util/prisma';
 import jwt from 'jsonwebtoken';
 
+// Force dynamic rendering since this route uses request headers for authentication
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     // Get token from headers (Authorization: Bearer ...)
