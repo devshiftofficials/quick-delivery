@@ -15,23 +15,23 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 
-const AddSetting = ({ setting = {}, fetchSettings }) => {
+const AddSetting = ({ setting = null, fetchSettings }) => {
   const [formData, setFormData] = useState({
-    deliveryCharge: setting.deliveryCharge || '',
-    taxPercentage: setting.taxPercentage || '',
-    other1: setting.other1 || 0,
-    other2: setting.other2 || 0,
+    deliveryCharge: setting?.deliveryCharge || '',
+    taxPercentage: setting?.taxPercentage || '',
+    other1: setting?.other1 || 0,
+    other2: setting?.other2 || 0,
   });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (setting) {
+    if (setting && typeof setting === 'object') {
       setFormData({
-        deliveryCharge: setting.deliveryCharge || '',
-        taxPercentage: setting.taxPercentage || '',
-        other1: setting.other1 || 0,
-        other2: setting.other2 || 0,
+        deliveryCharge: setting?.deliveryCharge || '',
+        taxPercentage: setting?.taxPercentage || '',
+        other1: setting?.other1 || 0,
+        other2: setting?.other2 || 0,
       });
     }
   }, [setting]);

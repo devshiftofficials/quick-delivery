@@ -17,9 +17,17 @@ const SettingsPage = () => {
       setIsLoading(true);
       const response = await fetch('/api/settings');
       const data = await response.json();
-      setSettings([data]);
+      // Handle both array and object responses, and ensure no null values
+      if (Array.isArray(data)) {
+        setSettings(data.filter(item => item != null));
+      } else if (data && typeof data === 'object') {
+        setSettings([data]);
+      } else {
+        setSettings([]);
+      }
     } catch (error) {
       console.error('Error fetching settings:', error);
+      setSettings([]);
     } finally {
       setIsLoading(false);
     }

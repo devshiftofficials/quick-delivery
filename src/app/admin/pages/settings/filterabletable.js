@@ -32,12 +32,13 @@ const FilterableTable = ({ settings = [], fetchSettings }) => {
   }, [filter, settings]);
 
   const handleEditItem = (item) => {
+    if (!item) return;
     setEditSetting(item);
     setSettingForm({
-      deliveryCharge: item.deliveryCharge,
-      taxPercentage: item.taxPercentage,
-      other1: item.other1,
-      other2: item.other2,
+      deliveryCharge: item?.deliveryCharge ?? '',
+      taxPercentage: item?.taxPercentage ?? '',
+      other1: item?.other1 ?? 0,
+      other2: item?.other2 ?? 0,
     });
     setIsModalVisible(true);
   };
@@ -152,12 +153,12 @@ const FilterableTable = ({ settings = [], fetchSettings }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {Array.isArray(filteredData) && filteredData.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.deliveryCharge}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.taxPercentage}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.other1}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.other2}</td>
+              {Array.isArray(filteredData) && filteredData.filter(item => item != null).map((item, index) => (
+                <tr key={item?.id || index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.deliveryCharge ?? ''}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.taxPercentage ?? ''}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.other1 ?? 0}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.other2 ?? 0}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                     <button
                       onClick={() => handleEditItem(item)}
