@@ -84,7 +84,7 @@ const VendorColourPage = () => {
         type="loading"
       />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
+        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Typography
               variant="h4"
@@ -123,28 +123,49 @@ const VendorColourPage = () => {
             component={Paper}
             sx={{
               borderRadius: 3,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               border: '1px solid rgba(99, 102, 241, 0.1)',
               background: 'white',
+              overflow: 'hidden',
             }}
           >
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Hex</TableCell>
-                <TableCell>Preview</TableCell>
-                <TableCell>Actions</TableCell>
+              <TableRow sx={{ bgcolor: 'rgba(99, 102, 241, 0.05)' }}>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>ID</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Hex</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Preview</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Array.isArray(colors) && colors.length > 0 ? (
                 colors.map((color) => (
-                  <TableRow key={color.id}>
-                    <TableCell>{color.id}</TableCell>
-                    <TableCell>{color.name}</TableCell>
-                    <TableCell>{color.hex || 'N/A'}</TableCell>
+                  <TableRow 
+                    key={color.id}
+                    sx={{
+                      '&:hover': {
+                        bgcolor: 'rgba(99, 102, 241, 0.02)',
+                      },
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >
+                    <TableCell>
+                      <Typography variant="body2" sx={{ color: '#64748b' }}>
+                        {color.id}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: '#1a202c' }}>
+                        {color.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ color: '#64748b', fontFamily: 'monospace' }}>
+                        {color.hex || 'N/A'}
+                      </Typography>
+                    </TableCell>
                     <TableCell>
                       {color.hex && (
                         <Box
@@ -152,29 +173,50 @@ const VendorColourPage = () => {
                             width: 40,
                             height: 40,
                             bgcolor: color.hex,
-                            border: '1px solid #ccc',
-                            borderRadius: 1,
+                            border: '2px solid #e5e7eb',
+                            borderRadius: 2,
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                           }}
                         />
                       )}
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={() => {
-                        setCurrentColor(color);
-                        setIsModalOpen(true);
-                      }} color="primary">
-                        <Edit size={18} />
-                      </IconButton>
-                      <IconButton onClick={() => handleDeleteColor(color.id)} color="error">
-                        <Trash2 size={18} />
-                      </IconButton>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <IconButton 
+                          onClick={() => {
+                            setCurrentColor(color);
+                            setIsModalOpen(true);
+                          }}
+                          sx={{
+                            color: '#6366f1',
+                            '&:hover': {
+                              bgcolor: 'rgba(99, 102, 241, 0.1)',
+                            },
+                          }}
+                        >
+                          <Edit size={18} />
+                        </IconButton>
+                        <IconButton 
+                          onClick={() => handleDeleteColor(color.id)}
+                          sx={{
+                            color: '#ef4444',
+                            '&:hover': {
+                              bgcolor: 'rgba(239, 68, 68, 0.1)',
+                            },
+                          }}
+                        >
+                          <Trash2 size={18} />
+                        </IconButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    No colors found
+                  <TableCell colSpan={5} align="center" sx={{ py: 4 }}>
+                    <Typography variant="body1" sx={{ color: '#64748b' }}>
+                      No colors found
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}

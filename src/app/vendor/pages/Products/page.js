@@ -136,7 +136,7 @@ const VendorProductsPage = () => {
   return (
     <VendorLayout>
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="xl" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
+        <Container maxWidth="xl" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography
             variant="h4"
@@ -176,76 +176,156 @@ const VendorProductsPage = () => {
           </Box>
         )}
 
-        <TextField
-          fullWidth
-          placeholder="Search products..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          sx={{ mb: 3 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search size={20} style={{ color: '#6366f1' }} />
-              </InputAdornment>
-            ),
+        <Paper
+          sx={{
+            p: 2,
+            mb: 3,
+            borderRadius: 2,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+            border: '1px solid rgba(99, 102, 241, 0.1)',
           }}
-        />
+        >
+          <TextField
+            fullWidth
+            placeholder="Search products..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search size={20} style={{ color: '#6366f1' }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                '&:hover fieldset': {
+                  borderColor: '#6366f1',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#6366f1',
+                },
+              },
+            }}
+          />
+        </Paper>
 
         <TableContainer
           component={Paper}
           sx={{
             borderRadius: 3,
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
             border: '1px solid rgba(99, 102, 241, 0.1)',
             background: 'white',
+            overflow: 'hidden',
           }}
         >
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Image</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Vendor</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Stock</TableCell>
-                <TableCell>Actions</TableCell>
+              <TableRow sx={{ bgcolor: 'rgba(99, 102, 241, 0.05)' }}>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Image</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Vendor</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Price</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Stock</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Array.isArray(paginatedData) && paginatedData.length > 0 ? (
                 paginatedData.map((product) => (
-                  <TableRow key={product.id}>
+                  <TableRow 
+                    key={product.id}
+                    sx={{
+                      '&:hover': {
+                        bgcolor: 'rgba(99, 102, 241, 0.02)',
+                      },
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >
                     <TableCell>
                       {product.images && Array.isArray(product.images) && product.images[0] && (
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${product.images[0].url}`}
-                          alt={product.name}
-                          width={50}
-                          height={50}
-                          style={{ objectFit: 'cover', borderRadius: 4 }}
-                        />
+                        <Box
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                          }}
+                        >
+                          <Image
+                            src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${product.images[0].url}`}
+                            alt={product.name}
+                            width={60}
+                            height={60}
+                            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                          />
+                        </Box>
                       )}
                     </TableCell>
-                    <TableCell>{product.name}</TableCell>
                     <TableCell>
-                      {product.vendor ? product.vendor.name : 'N/A'}
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: '#1a202c' }}>
+                        {product.name}
+                      </Typography>
                     </TableCell>
-                    <TableCell>Rs. {product.price}</TableCell>
-                    <TableCell>{product.stock}</TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleEditProduct(product)} color="primary">
-                        <Edit size={18} />
-                      </IconButton>
-                      <IconButton onClick={() => handleDeleteProduct(product.id)} color="error">
-                        <Trash2 size={18} />
-                      </IconButton>
+                      <Typography variant="body2" sx={{ color: '#64748b' }}>
+                        {product.vendor ? product.vendor.name : 'N/A'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1" sx={{ fontWeight: 700, color: '#10b981' }}>
+                        Rs. {product.price}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          fontWeight: 600,
+                          color: product.stock > 0 ? '#10b981' : '#ef4444',
+                        }}
+                      >
+                        {product.stock}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <IconButton 
+                          onClick={() => handleEditProduct(product)} 
+                          sx={{
+                            color: '#6366f1',
+                            '&:hover': {
+                              bgcolor: 'rgba(99, 102, 241, 0.1)',
+                            },
+                          }}
+                        >
+                          <Edit size={18} />
+                        </IconButton>
+                        <IconButton 
+                          onClick={() => handleDeleteProduct(product.id)} 
+                          sx={{
+                            color: '#ef4444',
+                            '&:hover': {
+                              bgcolor: 'rgba(239, 68, 68, 0.1)',
+                            },
+                          }}
+                        >
+                          <Trash2 size={18} />
+                        </IconButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    No products found
+                  <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                    <Typography variant="body1" sx={{ color: '#64748b' }}>
+                      No products found
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}

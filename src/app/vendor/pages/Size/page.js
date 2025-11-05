@@ -84,7 +84,7 @@ const VendorSizePage = () => {
         type="loading"
       />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
+        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Typography
               variant="h4"
@@ -123,42 +123,79 @@ const VendorSizePage = () => {
             component={Paper}
             sx={{
               borderRadius: 3,
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               border: '1px solid rgba(99, 102, 241, 0.1)',
               background: 'white',
+              overflow: 'hidden',
             }}
           >
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Actions</TableCell>
+              <TableRow sx={{ bgcolor: 'rgba(99, 102, 241, 0.05)' }}>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>ID</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Array.isArray(sizes) && sizes.length > 0 ? (
                 sizes.map((size) => (
-                <TableRow key={size.id}>
-                  <TableCell>{size.id}</TableCell>
-                  <TableCell>{size.name}</TableCell>
+                <TableRow 
+                  key={size.id}
+                  sx={{
+                    '&:hover': {
+                      bgcolor: 'rgba(99, 102, 241, 0.02)',
+                    },
+                    transition: 'background-color 0.2s ease',
+                  }}
+                >
                   <TableCell>
-                    <IconButton onClick={() => {
-                      setCurrentSize(size);
-                      setIsModalOpen(true);
-                    }} color="primary">
-                      <Edit size={18} />
-                    </IconButton>
-                    <IconButton onClick={() => handleDeleteSize(size.id)} color="error">
-                      <Trash2 size={18} />
-                    </IconButton>
+                    <Typography variant="body2" sx={{ color: '#64748b' }}>
+                      {size.id}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1" sx={{ fontWeight: 600, color: '#1a202c' }}>
+                      {size.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <IconButton 
+                        onClick={() => {
+                          setCurrentSize(size);
+                          setIsModalOpen(true);
+                        }}
+                        sx={{
+                          color: '#6366f1',
+                          '&:hover': {
+                            bgcolor: 'rgba(99, 102, 241, 0.1)',
+                          },
+                        }}
+                      >
+                        <Edit size={18} />
+                      </IconButton>
+                      <IconButton 
+                        onClick={() => handleDeleteSize(size.id)}
+                        sx={{
+                          color: '#ef4444',
+                          '&:hover': {
+                            bgcolor: 'rgba(239, 68, 68, 0.1)',
+                          },
+                        }}
+                      >
+                        <Trash2 size={18} />
+                      </IconButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={3} align="center">
-                    No sizes found
+                  <TableCell colSpan={3} align="center" sx={{ py: 4 }}>
+                    <Typography variant="body1" sx={{ color: '#64748b' }}>
+                      No sizes found
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}

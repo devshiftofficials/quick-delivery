@@ -123,7 +123,7 @@ const VendorProfilePage = () => {
 
   return (
     <VendorLayout>
-      <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', p: 3 }}>
+      <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', p: 2, pt: 2 }}>
         <LoadingDialog 
           open={saving} 
           message="Saving Profile..." 

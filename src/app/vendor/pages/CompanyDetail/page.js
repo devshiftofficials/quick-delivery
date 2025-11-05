@@ -169,7 +169,7 @@ const VendorCompanyDetailsPage = () => {
   return (
     <VendorLayout>
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
+        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
           <Fade in timeout={800}>
         <Grid container spacing={4}>
               {/* Form Section */}

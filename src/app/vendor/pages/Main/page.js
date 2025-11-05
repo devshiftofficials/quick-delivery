@@ -134,7 +134,8 @@ export default function VendorHome() {
             width: '100%',
             maxWidth: '100%',
             px: { xs: 2, sm: 3 },
-            py: 3,
+            py: 2,
+            pt: 2,
           }}
         >
           {/* Welcome Section */}

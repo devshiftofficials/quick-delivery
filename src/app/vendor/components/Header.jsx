@@ -92,7 +92,6 @@ const Header = () => {
         background: '#ffffff',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)',
         transition: 'all 0.3s ease',
-        position: 'relative',
         borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
       }}
     >
@@ -102,8 +101,9 @@ const Header = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           px: { xs: 2, sm: 3, md: 4 },
-          py: 1.5,
+          py: 1,
           minHeight: '64px !important',
+          height: '64px',
           gap: 2,
         }}
       >

@@ -41,6 +41,7 @@ export default function VendorRootLayout({ children }) {
             overflowY: 'auto',
             overflowX: 'hidden',
             pt: '64px', // Padding for fixed header
+            pb: 0,
           }}
         >
           {children}

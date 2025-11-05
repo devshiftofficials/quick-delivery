@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import VendorLayout from '../layout';
+import LoadingDialog from '../../../components/LoadingDialog';
 
 // MUI Imports
 import {
@@ -341,30 +342,18 @@ const AddProductPage = () => {
 
   return (
     <VendorLayout>
+      <LoadingDialog 
+        open={isLoading} 
+        message={newProduct.id ? "Updating Product..." : "Creating Product..."} 
+        type="loading"
+      />
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
-        {isLoading && (
-          <Box
-            sx={{
-              position: 'fixed',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              bgcolor: 'rgba(0, 0, 0, 0.5)',
-              zIndex: 50,
-            }}
-          >
-            <CircularProgress color="inherit" />
-            <Typography sx={{ color: 'white', ml: 2 }}>Loading...</Typography>
-          </Box>
-        )}
-
+        <Container maxWidth="lg" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
         <Paper
           sx={{
-            p: 3,
+            p: 4,
             borderRadius: 3,
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
             border: '1px solid rgba(99, 102, 241, 0.1)',
             background: 'white',
           }}
@@ -387,9 +376,19 @@ const AddProductPage = () => {
           </Box>
 
           {/* Product Details */}
-          <Typography variant="h6" sx={{ fontWeight: 'medium', mb: 2 }}>
-            Product Details
-          </Typography>
+          <Paper
+            sx={{
+              p: 2,
+              mb: 3,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              color: 'white',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Product Details
+            </Typography>
+          </Paper>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
@@ -571,9 +570,20 @@ const AddProductPage = () => {
           </Grid>
 
           {/* Description */}
-          <Typography variant="h6" sx={{ fontWeight: 'medium', mt: 4, mb: 2 }}>
-            Description
-          </Typography>
+          <Paper
+            sx={{
+              p: 2,
+              mt: 4,
+              mb: 3,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              color: 'white',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Description
+            </Typography>
+          </Paper>
           {ReactQuill && (
             <ReactQuill
               value={newProduct.richDescription}
@@ -584,9 +594,20 @@ const AddProductPage = () => {
           )}
 
           {/* Meta Fields */}
-          <Typography variant="h6" sx={{ fontWeight: 'medium', mt: 4, mb: 2 }}>
-            SEO Fields
-          </Typography>
+          <Paper
+            sx={{
+              p: 2,
+              mt: 4,
+              mb: 3,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              color: 'white',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              SEO Fields
+            </Typography>
+          </Paper>
           <TextField
             fullWidth
             label="Meta Title"
@@ -618,9 +639,20 @@ const AddProductPage = () => {
           />
 
           {/* Upload Images */}
-          <Typography variant="h6" sx={{ fontWeight: 'medium', mt: 4, mb: 2 }}>
-            Upload Images
-          </Typography>
+          <Paper
+            sx={{
+              p: 2,
+              mt: 4,
+              mb: 3,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              color: 'white',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Upload Images
+            </Typography>
+          </Paper>
           <TextField
             fullWidth
             label="Upload New Images"
@@ -704,20 +736,45 @@ const AddProductPage = () => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
             <Button
               variant="outlined"
-              color="secondary"
               onClick={() => router.push('/vendor/pages/Products')}
-              sx={{ px: 3, py: 1, fontWeight: 'bold' }}
+              sx={{ 
+                px: 3, 
+                py: 1.5, 
+                fontWeight: 600,
+                borderRadius: 2,
+                borderColor: '#6366f1',
+                color: '#6366f1',
+                '&:hover': {
+                  borderColor: '#8b5cf6',
+                  bgcolor: 'rgba(99, 102, 241, 0.05)',
+                },
+              }}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
-              color="primary"
               onClick={handleAddNewItem}
               disabled={isLoading}
-              sx={{ px: 3, py: 1, fontWeight: 'bold' }}
+              sx={{ 
+                px: 3, 
+                py: 1.5, 
+                fontWeight: 600,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                  boxShadow: '0 6px 20px rgba(99, 102, 241, 0.5)',
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+                '&:disabled': {
+                  background: '#9ca3af',
+                },
+              }}
             >
-              {isLoading ? <CircularProgress size={24} /> : (newProduct.id ? 'Update' : 'Add')}
+              {newProduct.id ? 'Update Product' : 'Add Product'}
             </Button>
           </Box>
         </Paper>

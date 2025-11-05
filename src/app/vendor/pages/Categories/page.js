@@ -71,7 +71,7 @@ const VendorCategoriesPage = () => {
   return (
     <VendorLayout>
       <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', minHeight: '100%' }}>
-        <Container maxWidth="xl" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
+        <Container maxWidth="xl" sx={{ width: '100%', maxWidth: '100%', px: { xs: 2, sm: 3 }, py: 2, pt: 2 }}>
           <Typography
             variant="h4"
             sx={{
@@ -87,7 +87,19 @@ const VendorCategoriesPage = () => {
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Categories</Typography>
+            <Paper
+              sx={{
+                p: 2,
+                mb: 2,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                color: 'white',
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                Categories
+              </Typography>
+            </Paper>
             <Grid container spacing={2}>
               {Array.isArray(categories) && categories.length > 0 ? (
                 categories.map((category) => (
@@ -96,48 +108,102 @@ const VendorCategoriesPage = () => {
                     onClick={() => setSelectedCategory(category)}
                     sx={{
                       cursor: 'pointer',
-                      '&:hover': { boxShadow: 6 },
-                      bgcolor: selectedCategory?.id === category.id ? 'primary.light' : 'background.paper',
+                      borderRadius: 3,
+                      boxShadow: selectedCategory?.id === category.id 
+                        ? '0 8px 24px rgba(99, 102, 241, 0.3)' 
+                        : '0 4px 12px rgba(0,0,0,0.08)',
+                      border: selectedCategory?.id === category.id 
+                        ? '2px solid #6366f1' 
+                        : '1px solid rgba(99, 102, 241, 0.1)',
+                      bgcolor: selectedCategory?.id === category.id 
+                        ? 'rgba(99, 102, 241, 0.05)' 
+                        : 'white',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 8px 24px rgba(99, 102, 241, 0.2)',
+                      },
                     }}
                   >
-                    <CardContent>
+                    <CardContent sx={{ p: 2 }}>
                       {category.imageUrl && (
-                        <CardMedia sx={{ mb: 2 }}>
+                        <Box
+                          sx={{
+                            mb: 2,
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                          }}
+                        >
                           <Image
                             src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${category.imageUrl}`}
                             alt={category.name}
-                            width={100}
-                            height={100}
-                            style={{ objectFit: 'cover', borderRadius: 4 }}
+                            width={120}
+                            height={120}
+                            style={{ objectFit: 'cover', width: '100%', height: '120px' }}
                           />
-                        </CardMedia>
+                        </Box>
                       )}
-                      <Typography variant="h6">{category.name}</Typography>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 700,
+                          color: selectedCategory?.id === category.id ? '#6366f1' : '#1a202c',
+                        }}
+                      >
+                        {category.name}
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
               ))
               ) : (
                 <Grid item xs={12}>
-                  <Typography variant="body2" color="textSecondary">
-                    No categories found
-                  </Typography>
+                  <Paper
+                    sx={{
+                      p: 3,
+                      textAlign: 'center',
+                      borderRadius: 2,
+                      bgcolor: '#f8fafc',
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ color: '#64748b' }}>
+                      No categories found
+                    </Typography>
+                  </Paper>
                 </Grid>
               )}
             </Grid>
           </Grid>
 
           <Grid item xs={12} md={8}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              {selectedCategory ? `Subcategories in ${selectedCategory.name}` : 'All Subcategories'}
-            </Typography>
-            <TableContainer component={Paper}>
+            <Paper
+              sx={{
+                p: 2,
+                mb: 2,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                color: 'white',
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                {selectedCategory ? `Subcategories in ${selectedCategory.name}` : 'All Subcategories'}
+              </Typography>
+            </Paper>
+            <TableContainer 
+              component={Paper}
+              sx={{
+                borderRadius: 3,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(99, 102, 241, 0.1)',
+              }}
+            >
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Category</TableCell>
+                  <TableRow sx={{ bgcolor: 'rgba(99, 102, 241, 0.05)' }}>
+                    <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Image</TableCell>
+                    <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Name</TableCell>
+                    <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Category</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -145,27 +211,53 @@ const VendorCategoriesPage = () => {
                     filteredSubcategories.map((sub) => {
                     const parentCategory = categories.find((cat) => cat.id === sub.categoryId);
                     return (
-                      <TableRow key={sub.id}>
+                      <TableRow 
+                        key={sub.id}
+                        sx={{
+                          '&:hover': {
+                            bgcolor: 'rgba(99, 102, 241, 0.02)',
+                          },
+                          transition: 'background-color 0.2s ease',
+                        }}
+                      >
                         <TableCell>
                           {sub.imageUrl && (
-                            <Image
-                              src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${sub.imageUrl}`}
-                              alt={sub.name}
-                              width={50}
-                              height={50}
-                              style={{ objectFit: 'cover', borderRadius: 4 }}
-                            />
+                            <Box
+                              sx={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 2,
+                                overflow: 'hidden',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                              }}
+                            >
+                              <Image
+                                src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${sub.imageUrl}`}
+                                alt={sub.name}
+                                width={60}
+                                height={60}
+                                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                              />
+                            </Box>
                           )}
                         </TableCell>
-                        <TableCell>{sub.name}</TableCell>
-                        <TableCell>{parentCategory?.name || 'N/A'}</TableCell>
+                        <TableCell>
+                          <Typography variant="body1" sx={{ fontWeight: 600, color: '#1a202c' }}>
+                            {sub.name}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" sx={{ color: '#64748b' }}>
+                            {parentCategory?.name || 'N/A'}
+                          </Typography>
+                        </TableCell>
                       </TableRow>
                     );
                     })
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={3} align="center">
-                        <Typography variant="body2" color="textSecondary">
+                      <TableCell colSpan={3} align="center" sx={{ py: 4 }}>
+                        <Typography variant="body1" sx={{ color: '#64748b' }}>
                           No subcategories found
                         </Typography>
                       </TableCell>
