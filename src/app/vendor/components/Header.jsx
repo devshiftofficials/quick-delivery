@@ -102,8 +102,8 @@ const Header = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           px: { xs: 2, sm: 3, md: 4 },
-          py: 2,
-          minHeight: '72px !important',
+          py: 1.5,
+          minHeight: '64px !important',
           gap: 2,
         }}
       >
@@ -484,7 +484,12 @@ const Header = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem 
+                onClick={() => {
+                  handleMenuClose();
+                  router.push('/vendor/pages/profile');
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',
@@ -517,7 +522,12 @@ const Header = () => {
                 </Box>
               </MenuItem>
               
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem 
+                onClick={() => {
+                  handleMenuClose();
+                  router.push('/vendor/pages/Setting');
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',

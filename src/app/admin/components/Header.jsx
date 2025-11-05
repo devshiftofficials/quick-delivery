@@ -477,7 +477,12 @@ const Header = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem 
+                onClick={() => {
+                  handleMenuClose();
+                  router.push('/admin/pages/profile');
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',
@@ -510,7 +515,12 @@ const Header = () => {
                 </Box>
               </MenuItem>
               
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem 
+                onClick={() => {
+                  handleMenuClose();
+                  router.push('/admin/pages/settings');
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',

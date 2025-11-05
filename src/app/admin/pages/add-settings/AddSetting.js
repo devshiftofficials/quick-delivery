@@ -2,18 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-// MUI Imports
 import {
   Box,
+  Container,
   Paper,
   Typography,
   TextField,
   Button,
-  Backdrop,
-  CircularProgress,
+  Fade,
+  Grow,
+  Slide,
+  Card,
+  CardContent,
 } from '@mui/material';
-import { styled } from '@mui/system';
+import { Settings, X } from 'lucide-react';
+import LoadingDialog from '../../../components/LoadingDialog';
 
 const AddSetting = ({ setting = null, fetchSettings }) => {
   const [formData, setFormData] = useState({
@@ -62,137 +65,165 @@ const AddSetting = ({ setting = null, fetchSettings }) => {
       }
     } catch (error) {
       console.error('Error saving settings:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
-    <Box sx={{ bgcolor: 'grey.100', minHeight: '100vh', p: 3 }}>
-      {/* Loading Backdrop */}
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading}
-      >
-        <CircularProgress color="inherit" />
-        <Typography variant="h6" sx={{ ml: 2, color: '#fff' }}>
-          Loading...
-        </Typography>
-      </Backdrop>
-
-      {/* Main Content */}
-      <Paper
-        sx={{
-          p: 4,
-          borderRadius: 2,
-          boxShadow: 3,
-          maxWidth: '600px',
-          mx: 'auto',
-        }}
-      >
-        <Typography variant="h6" sx={{ mb: 4, fontWeight: 'bold', color: 'grey.800' }}>
-          {setting.id ? 'Edit Setting' : 'Add Setting'}
-        </Typography>
-
-        <form onSubmit={handleFormSubmit}>
-          {/* Delivery Charge */}
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              fullWidth
-              label="Delivery Charge"
-              name="deliveryCharge"
-              type="number"
-              value={formData.deliveryCharge}
-              onChange={handleFormChange}
-              variant="outlined"
-              size="small"
-              required
-              InputProps={{
-                sx: { borderRadius: '8px' },
-              }}
-            />
-          </Box>
-
-          {/* Tax Percentage */}
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              fullWidth
-              label="Tax Percentage"
-              name="taxPercentage"
-              type="number"
-              value={formData.taxPercentage}
-              onChange={handleFormChange}
-              variant="outlined"
-              size="small"
-              required
-              InputProps={{
-                sx: { borderRadius: '8px' },
-              }}
-            />
-          </Box>
-
-          {/* Other1 */}
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              fullWidth
-              label="Other1"
-              name="other1"
-              type="number"
-              value={formData.other1}
-              onChange={handleFormChange}
-              variant="outlined"
-              size="small"
-              InputProps={{
-                sx: { borderRadius: '8px' },
-              }}
-            />
-          </Box>
-
-          {/* Other2 */}
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              fullWidth
-              label="Other2"
-              name="other2"
-              type="number"
-              value={formData.other2}
-              onChange={handleFormChange}
-              variant="outlined"
-              size="small"
-              InputProps={{
-                sx: { borderRadius: '8px' },
-              }}
-            />
-          </Box>
-
-          {/* Buttons */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button
-              onClick={() => router.push('/admin/pages/settings')}
-              variant="contained"
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', p: 3 }}>
+      <LoadingDialog 
+        open={isLoading} 
+        message="Saving Settings..." 
+        type="loading"
+      />
+      
+      <Container maxWidth="md">
+        <Fade in timeout={800}>
+          <Card
+            sx={{
+              borderRadius: 4,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+              overflow: 'hidden',
+            }}
+          >
+            <Box
               sx={{
-                bgcolor: 'grey.300',
-                color: 'grey.800',
-                '&:hover': { bgcolor: 'grey.400' },
-                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                p: 3,
+                color: 'white',
               }}
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{
-                bgcolor: 'blue.500',
-                '&:hover': { bgcolor: 'blue.700' },
-                borderRadius: '8px',
-              }}
-            >
-              {setting.id ? 'Update' : 'Add'}
-            </Button>
-          </Box>
-        </form>
-      </Paper>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    background: 'rgba(255,255,255,0.2)',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <Settings size={28} />
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 800 }}>
+                  {setting?.id ? 'Edit Setting' : 'Add New Setting'}
+                </Typography>
+              </Box>
+            </Box>
+
+            <CardContent sx={{ p: 4 }}>
+              <form onSubmit={handleFormSubmit}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <Grow in timeout={600}>
+                    <TextField
+                      fullWidth
+                      label="Delivery Charge (Rs.)"
+                      name="deliveryCharge"
+                      type="number"
+                      value={formData.deliveryCharge}
+                      onChange={handleFormChange}
+                      required
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grow>
+
+                  <Grow in timeout={700}>
+                    <TextField
+                      fullWidth
+                      label="Tax Percentage (%)"
+                      name="taxPercentage"
+                      type="number"
+                      value={formData.taxPercentage}
+                      onChange={handleFormChange}
+                      required
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grow>
+
+                  <Grow in timeout={800}>
+                    <TextField
+                      fullWidth
+                      label="Cash on Delivery Charges (Rs.)"
+                      name="other1"
+                      type="number"
+                      value={formData.other1}
+                      onChange={handleFormChange}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grow>
+
+                  <Grow in timeout={900}>
+                    <TextField
+                      fullWidth
+                      label="Other Charges (Rs.)"
+                      name="other2"
+                      type="number"
+                      value={formData.other2}
+                      onChange={handleFormChange}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grow>
+
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                    <Button
+                      onClick={() => router.push('/admin/pages/settings')}
+                      variant="outlined"
+                      sx={{
+                        borderColor: '#6366f1',
+                        color: '#6366f1',
+                        fontWeight: 600,
+                        px: 4,
+                        '&:hover': {
+                          borderColor: '#8b5cf6',
+                          background: 'rgba(99, 102, 241, 0.1)',
+                        },
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                        fontWeight: 600,
+                        px: 4,
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                          transform: 'translateY(-2px)',
+                        },
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      {setting?.id ? 'Update' : 'Add'} Setting
+                    </Button>
+                  </Box>
+                </Box>
+              </form>
+            </CardContent>
+          </Card>
+        </Fade>
+      </Container>
     </Box>
   );
 };

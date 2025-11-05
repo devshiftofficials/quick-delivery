@@ -43,6 +43,7 @@ import {
   Receipt as ReceiptIcon,
   CalendarToday as CalendarTodayIcon,
 } from '@mui/icons-material';
+import PageLoader from '../../../components/PageLoader';
 
 const AdminOrdersPage = () => {
   const [loading, setLoading] = useState(true);
@@ -128,24 +129,7 @@ const AdminOrdersPage = () => {
   };
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-          gap: 2,
-          }}
-        >
-        <CircularProgress size={60} sx={{ color: '#ff5900' }} />
-        <Typography variant="h6" sx={{ color: '#ff5900', fontWeight: 600 }}>
-          Loading Order Details...
-        </Typography>
-      </Box>
-    );
+    return <PageLoader message="Loading Order Details..." />;
   }
 
   if (error && !order) {
@@ -210,7 +194,7 @@ const AdminOrdersPage = () => {
               sx={{
                 mb: 3,
                 borderRadius: 3,
-                background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 color: 'white',
                 boxShadow: '0 8px 30px rgba(255, 89, 0, 0.3)',
               }}
@@ -277,12 +261,12 @@ const AdminOrdersPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
-                        background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                       }}
                     >
-                      <CheckCircleIcon sx={{ color: '#ff5900' }} />
+                      <CheckCircleIcon sx={{ color: '#6366f1' }} />
                       Order Information
                     </Typography>
 
@@ -300,7 +284,7 @@ const AdminOrdersPage = () => {
                             Order Date
                           </Typography>
                           <Typography variant="body1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <CalendarTodayIcon sx={{ fontSize: 18, color: '#ff5900' }} />
+                            <CalendarTodayIcon sx={{ fontSize: 18, color: '#6366f1' }} />
                             {new Date(order.createdAt).toLocaleString()}
               </Typography>
                         </Box>
@@ -330,7 +314,7 @@ const AdminOrdersPage = () => {
                                   borderRadius: 2,
                                   '&:hover': {
                                     '& .MuiOutlinedInput-notchedOutline': {
-                                      borderColor: '#ff5900',
+                                      borderColor: '#6366f1',
                                     },
                                   },
                                 }}
@@ -350,9 +334,9 @@ const AdminOrdersPage = () => {
                                 isUpdatingStatus || !selectedStatus || selectedStatus === order.status
                               }
                               sx={{
-                                background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                                 '&:hover': {
-                                  background: 'linear-gradient(135deg, #e2552b 0%, #ff5900 100%)',
+                                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
                                 },
                                 borderRadius: 2,
                                 px: 3,
@@ -378,7 +362,7 @@ const AdminOrdersPage = () => {
                             Customer ID
                           </Typography>
                           <Typography variant="body1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <PersonIcon sx={{ fontSize: 18, color: '#ff5900' }} />
+                            <PersonIcon sx={{ fontSize: 18, color: '#6366f1' }} />
                             {order.userId}
                 </Typography>
                         </Box>
@@ -400,8 +384,8 @@ const AdminOrdersPage = () => {
                             label={order.paymentMethod || 'N/A'}
                             variant="outlined"
                             sx={{
-                              borderColor: '#ff5900',
-                              color: '#ff5900',
+                              borderColor: '#6366f1',
+                              color: '#6366f1',
                               fontWeight: 600,
                             }}
                           />
@@ -424,12 +408,12 @@ const AdminOrdersPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
-                        background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                       }}
                     >
-                      <LocationOnIcon sx={{ color: '#ff5900' }} />
+                      <LocationOnIcon sx={{ color: '#6366f1' }} />
                       Shipping Address
                     </Typography>
                     <Box
@@ -456,7 +440,7 @@ const AdminOrdersPage = () => {
                       </Typography>
                       {order.email && (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-                          <EmailIcon sx={{ fontSize: 18, color: '#ff5900' }} />
+                          <EmailIcon sx={{ fontSize: 18, color: '#6366f1' }} />
                           <Typography variant="body2" sx={{ color: '#6b7280' }}>
                             {order.email}
                           </Typography>
@@ -479,12 +463,12 @@ const AdminOrdersPage = () => {
                           display: 'flex',
                           alignItems: 'center',
                           gap: 1,
-                          background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                         }}
                       >
-                        <ShoppingCartIcon sx={{ color: '#ff5900' }} />
+                        <ShoppingCartIcon sx={{ color: '#6366f1' }} />
                         Order Items ({order.orderItems.length})
                       </Typography>
                     </Box>
@@ -623,12 +607,12 @@ const AdminOrdersPage = () => {
                           display: 'flex',
                           alignItems: 'center',
                           gap: 1,
-                          background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                         }}
                       >
-                        <LocalShippingIcon sx={{ color: '#ff5900' }} />
+                        <LocalShippingIcon sx={{ color: '#6366f1' }} />
               Shipping Information
             </Typography>
             <form onSubmit={handleShippingSubmit}>
@@ -720,9 +704,9 @@ const AdminOrdersPage = () => {
                               type="submit"
                               variant="contained"
                               sx={{
-                                background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                                 '&:hover': {
-                                  background: 'linear-gradient(135deg, #e2552b 0%, #ff5900 100%)',
+                                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
                                 },
                                 borderRadius: 2,
                                 px: 4,
@@ -762,12 +746,12 @@ const AdminOrdersPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
-                        background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                       }}
                     >
-                      <ReceiptIcon sx={{ color: '#ff5900' }} />
+                      <ReceiptIcon sx={{ color: '#6366f1' }} />
                       Order Summary
                     </Typography>
 
@@ -860,10 +844,10 @@ const AdminOrdersPage = () => {
                           border: '2px solid rgba(255, 89, 0, 0.2)',
                         }}
                       >
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#ff5900' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#6366f1' }}>
                           Total:
                         </Typography>
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#ff5900' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#6366f1' }}>
                           Rs. {total.toLocaleString()}
               </Typography>
                 </Box>

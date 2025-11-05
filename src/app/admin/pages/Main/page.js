@@ -219,10 +219,6 @@ export default function Home() {
     fetchData(startDate, endDate);
   }, [startDate, endDate]);
 
-  if (loading && !statsData) {
-    return <PageLoader message="Loading Dashboard..." />;
-  }
-
   const handleFilter = () => {
     if (startDate && endDate) {
       fetchData(startDate, endDate);
@@ -307,6 +303,11 @@ export default function Home() {
       },
     ];
   }, [statsData]);
+
+  // Early return after all hooks have been called
+  if (loading && !statsData) {
+    return <PageLoader message="Loading Dashboard..." />;
+  }
 
   const options = {
     responsive: true,

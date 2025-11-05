@@ -331,7 +331,7 @@ const AddProductPageContent = () => {
             backdropFilter: 'blur(4px)',
           }}
         >
-          <CircularProgress size={60} sx={{ color: '#ff5900', mb: 2 }} />
+          <CircularProgress size={60} sx={{ color: '#6366f1', mb: 2 }} />
           <Typography sx={{ color: 'white', fontSize: '1.1rem', fontWeight: 600 }}>
             {images.length > 0 ? 'Uploading images...' : 'Processing...'}
           </Typography>
@@ -347,7 +347,7 @@ const AddProductPageContent = () => {
               sx={{
                 mb: 3,
                 borderRadius: 3,
-                background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 color: 'white',
                 boxShadow: '0 8px 30px rgba(255, 89, 0, 0.3)',
               }}
@@ -402,7 +402,7 @@ const AddProductPageContent = () => {
                   sx={{
                     fontWeight: 700,
                     mb: 3,
-                    background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     display: 'flex',
@@ -410,7 +410,7 @@ const AddProductPageContent = () => {
                     gap: 1,
                   }}
                 >
-                  <CheckCircleIcon sx={{ color: '#ff5900' }} />
+                  <CheckCircleIcon sx={{ color: '#6366f1' }} />
           Product Details
         </Typography>
                 <Divider sx={{ mb: 3 }} />
@@ -432,7 +432,7 @@ const AddProductPageContent = () => {
                           borderRadius: 2,
                           '&:hover': {
                             '& .MuiOutlinedInput-notchedOutline': {
-                              borderColor: '#ff5900',
+                              borderColor: '#6366f1',
                             },
                           },
                         }}
@@ -469,7 +469,7 @@ const AddProductPageContent = () => {
                             borderRadius: 2,
                             '&:hover': {
                               '& .MuiOutlinedInput-notchedOutline': {
-                                borderColor: '#ff5900',
+                                borderColor: '#6366f1',
                               },
                             },
                           }}
@@ -508,7 +508,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -534,7 +534,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -559,7 +559,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -586,7 +586,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -616,7 +616,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -643,7 +643,7 @@ const AddProductPageContent = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: '#ff5900',
+                            borderColor: '#6366f1',
                           },
                         },
                       }}
@@ -658,15 +658,15 @@ const AddProductPageContent = () => {
                   checked={newProduct.isTopRated}
                   onChange={(e) => setNewProduct({ ...newProduct, isTopRated: e.target.checked })}
                           sx={{
-                            color: '#ff5900',
+                            color: '#6366f1',
                             '&.Mui-checked': {
-                              color: '#ff5900',
+                              color: '#6366f1',
                             },
                           }}
                 />
               }
                       label={
-                        <Typography sx={{ fontWeight: 600, color: newProduct.isTopRated ? '#ff5900' : 'inherit' }}>
+                        <Typography sx={{ fontWeight: 600, color: newProduct.isTopRated ? '#6366f1' : 'inherit' }}>
                           Top Rated Product
                         </Typography>
                       }
@@ -702,7 +702,7 @@ const AddProductPageContent = () => {
                           borderRadius: 2,
                           '&:hover': {
                             '& .MuiOutlinedInput-notchedOutline': {
-                              borderColor: '#ff5900',
+                              borderColor: '#6366f1',
                             },
                           },
                         }}
@@ -747,7 +747,7 @@ const AddProductPageContent = () => {
                           borderRadius: 2,
                           '&:hover': {
                             '& .MuiOutlinedInput-notchedOutline': {
-                              borderColor: '#ff5900',
+                              borderColor: '#6366f1',
                             },
                           },
                         }}
@@ -771,7 +771,7 @@ const AddProductPageContent = () => {
                   sx={{
                     fontWeight: 700,
                     mb: 2,
-                    background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -815,7 +815,7 @@ const AddProductPageContent = () => {
                   sx={{
                     fontWeight: 700,
                     mb: 2,
-                    background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -881,7 +881,7 @@ const AddProductPageContent = () => {
                   sx={{
                     fontWeight: 700,
                     mb: 2,
-                    background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     display: 'flex',
@@ -889,7 +889,7 @@ const AddProductPageContent = () => {
                     gap: 1,
                   }}
                 >
-                  <ImageIcon sx={{ color: '#ff5900' }} />
+                  <ImageIcon sx={{ color: '#6366f1' }} />
                   Product Images
         </Typography>
                 <Divider sx={{ mb: 2 }} />
@@ -898,13 +898,13 @@ const AddProductPageContent = () => {
                 <Card
                   sx={{
                     mb: 3,
-                    border: '2px dashed #ff5900',
+                    border: '2px dashed #6366f1',
                     borderRadius: 3,
                     bgcolor: 'rgba(255, 89, 0, 0.05)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       bgcolor: 'rgba(255, 89, 0, 0.1)',
-                      borderColor: '#e2552b',
+                      borderColor: '#8b5cf6',
                       transform: 'translateY(-2px)',
                     },
                   }}
@@ -925,15 +925,15 @@ const AddProductPageContent = () => {
                         variant="outlined"
                         startIcon={<AddIcon />}
                         sx={{
-                          borderColor: '#ff5900',
-                          color: '#ff5900',
+                          borderColor: '#6366f1',
+                          color: '#6366f1',
                           borderRadius: 2,
                           px: 4,
                           py: 1.5,
                           fontWeight: 600,
                           textTransform: 'none',
                           '&:hover': {
-                            borderColor: '#e2552b',
+                            borderColor: '#8b5cf6',
                             bgcolor: 'rgba(255, 89, 0, 0.1)',
                             transform: 'scale(1.05)',
                           },
@@ -1122,10 +1122,10 @@ const AddProductPageContent = () => {
                     borderRadius: 2,
                     fontWeight: 700,
                     textTransform: 'none',
-                    background: 'linear-gradient(135deg, #ff5900 0%, #e2552b 100%)',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     boxShadow: '0 4px 15px rgba(255, 89, 0, 0.4)',
                     '&:hover': {
-                      background: 'linear-gradient(135deg, #e2552b 0%, #ff5900 100%)',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
                       boxShadow: '0 6px 20px rgba(255, 89, 0, 0.6)',
                       transform: 'translateY(-2px)',
                     },
@@ -1156,7 +1156,7 @@ const AddProductPage = () => {
             background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
           }}
         >
-          <CircularProgress sx={{ color: '#ff5900' }} />
+          <CircularProgress sx={{ color: '#6366f1' }} />
         </Box>
       }
     >

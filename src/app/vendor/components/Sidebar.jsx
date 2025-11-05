@@ -29,6 +29,7 @@ import {
   Settings,
   Phone,
   Building2,
+  User,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -57,6 +58,7 @@ const Sidebar = () => {
     { icon: Tag, text: "Categories", href: "/vendor/pages/Categories" },
     { icon: Ruler, text: "Size", href: "/vendor/pages/Size" },
     { icon: Palette, text: "Colour", href: "/vendor/pages/Colour" },
+    { icon: User, text: "Profile", href: "/vendor/pages/profile" },
     { icon: Settings, text: "Setting", href: "/vendor/pages/Setting" },
     { icon: Phone, text: "Contact Info", href: "/vendor/pages/ContactInfo" },
     { icon: Building2, text: "Company Detail", href: "/vendor/pages/CompanyDetail" },

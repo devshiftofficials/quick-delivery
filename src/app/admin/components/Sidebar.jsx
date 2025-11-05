@@ -47,6 +47,7 @@ import {
   MessageCircle,
   BookOpen,
   Share2,
+  User,
 } from "lucide-react";
 
 const Sidebar = ({ setActiveComponent }) => {
@@ -862,6 +863,52 @@ const Sidebar = ({ setActiveComponent }) => {
             </List>
           </AccordionDetails>
         </Accordion>
+
+        {/* Profile */}
+        <Grow in timeout={1400}>
+          <ListItem disablePadding>
+            <ListItemButton
+              component="a"
+              href="/admin/pages/profile"
+              sx={{
+                py: 1,
+                borderRadius: 2,
+                mx: 1,
+                mb: 0.5,
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                  transform: "translateX(8px)",
+                  "& .MuiListItemIcon-root": {
+                    color: "#6366f1",
+                    transform: "scale(1.2)",
+                  },
+                  "& .MuiListItemText-primary": {
+                    color: "#6366f1",
+                    fontWeight: 600,
+                },
+              },
+            }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: pathname === "/admin/pages/profile" ? "#6366f1" : "#64748b",
+                  minWidth: "36px",
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <User size={20} />
+            </ListItemIcon>
+              <ListItemText
+                primary="Profile"
+                primaryTypographyProps={{
+                  fontSize: "0.95rem",
+                  fontWeight: pathname === "/admin/pages/profile" ? 600 : 400,
+                }}
+              />
+          </ListItemButton>
+        </ListItem>
+        </Grow>
 
         {/* Settings */}
         <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>

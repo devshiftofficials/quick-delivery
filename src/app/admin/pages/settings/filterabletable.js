@@ -1,9 +1,32 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// Lucide Icons
-import { Search, Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { 
+  Box, 
+  Paper, 
+  Typography, 
+  TextField, 
+  Button, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  DialogActions, 
+  Fade, 
+  Grow, 
+  Slide,
+  IconButton,
+  InputAdornment,
+  Card,
+  CardContent,
+} from '@mui/material';
+import { Search, Plus, Edit, X, Settings as SettingsIcon } from 'lucide-react';
+import LoadingDialog from '../../../components/LoadingDialog';
 
 const FilterableTable = ({ settings = [], fetchSettings }) => {
   const [filter, setFilter] = useState('');
@@ -18,7 +41,6 @@ const FilterableTable = ({ settings = [], fetchSettings }) => {
     other1: 0,
     other2: 0,
   });
-  const router = useRouter();
 
   useEffect(() => {
     setFilteredData(
@@ -90,8 +112,9 @@ const FilterableTable = ({ settings = [], fetchSettings }) => {
       }
     } catch (error) {
       console.error('Error saving settings:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleCancelEdit = () => {
@@ -106,141 +129,276 @@ const FilterableTable = ({ settings = [], fetchSettings }) => {
   };
 
   return (
-    <div className=" bg-gray-100 min-h-screen">
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-white text-xl">Loading...</div>
-        </div>
-      )}
-      <div className="bg-white shadow rounded-lg p-4 relative">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Settings</h2>
-          <div className="flex space-x-2">
-            <button
-              className="text-gray-600 hover:text-gray-900 focus:outline-none"
-              onClick={() => setIsSearchVisible(!isSearchVisible)}
-            >
-              <Search size={24} />
-            </button>
-            <button
-              className="text-gray-600 hover:text-gray-900 focus:outline-none"
-              onClick={handleAddNewItem}
-            >
-              <Plus size={24} />
-            </button>
-          </div>
-        </div>
-        {isSearchVisible && (
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        )}
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Charge</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tax Percentage</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cash on Delivery charges</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Other2</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {Array.isArray(filteredData) && filteredData.filter(item => item != null).map((item, index) => (
-                <tr key={item?.id || index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.deliveryCharge ?? ''}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.taxPercentage ?? ''}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.other1 ?? 0}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item?.other2 ?? 0}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => handleEditItem(item)}
-                      className="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa', p: 3 }}>
+      <LoadingDialog 
+        open={isLoading} 
+        message={editSetting ? "Updating Settings..." : "Saving Settings..."} 
+        type="loading"
+      />
+      
+      <Fade in timeout={800}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+            overflow: 'hidden',
+            background: 'white',
+          }}
+        >
+          <Box
+            sx={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              p: 3,
+              color: 'white',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    background: 'rgba(255,255,255,0.2)',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <SettingsIcon size={28} />
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 800 }}>
+                  Settings Management
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <IconButton
+                  onClick={() => setIsSearchVisible(!isSearchVisible)}
+                  sx={{
+                    color: 'white',
+                    background: 'rgba(255,255,255,0.2)',
+                    '&:hover': { background: 'rgba(255,255,255,0.3)' },
+                  }}
+                >
+                  <Search size={20} />
+                </IconButton>
+                <Button
+                  variant="contained"
+                  startIcon={<Plus size={20} />}
+                  onClick={handleAddNewItem}
+                  sx={{
+                    background: 'white',
+                    color: '#6366f1',
+                    fontWeight: 600,
+                    '&:hover': {
+                      background: 'rgba(255,255,255,0.9)',
+                      transform: 'translateY(-2px)',
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  Add Setting
+                </Button>
+              </Box>
+            </Box>
+          </Box>
 
-      {isModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 w-[700px] rounded shadow-lg">
-            <h2 className="text-xl mb-4">{editSetting ? 'Edit Setting' : 'Add Setting'}</h2>
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Delivery Charge</label>
-                <input
-                  type="number"
-                  name="deliveryCharge"
-                  value={settingForm.deliveryCharge}
-                  onChange={handleFormChange}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Tax Percentage</label>
-                <input
-                  type="number"
-                  name="taxPercentage"
-                  value={settingForm.taxPercentage}
-                  onChange={handleFormChange}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Cash on delivery charges</label>
-                <input
-                  type="number"
-                  name="other1"
-                  value={settingForm.other1}
-                  onChange={handleFormChange}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Other2</label>
-                <input
-                  type="number"
-                  name="other2"
-                  value={settingForm.other2}
-                  onChange={handleFormChange}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  {editSetting ? 'Update' : 'Add'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
+          <Slide direction="down" in={isSearchVisible} mountOnEnter unmountOnExit>
+            <Box sx={{ p: 2, bgcolor: '#f8fafc' }}>
+              <TextField
+                fullWidth
+                placeholder="Search settings..."
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search size={20} style={{ color: '#6366f1' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    bgcolor: 'white',
+                  },
+                }}
+              />
+            </Box>
+          </Slide>
+
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ bgcolor: '#f8fafc' }}>
+                  <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Delivery Charge</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Tax Percentage</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Cash on Delivery</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Other Charges</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#1a202c' }}>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(filteredData) && filteredData.filter(item => item != null).map((item, index) => (
+                  <Grow in timeout={(index + 1) * 100} key={item?.id || index}>
+                    <TableRow
+                      sx={{
+                        '&:hover': {
+                          bgcolor: '#f8fafc',
+                          transform: 'scale(1.01)',
+                        },
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <TableCell sx={{ fontWeight: 500 }}>Rs. {item?.deliveryCharge ?? '0'}</TableCell>
+                      <TableCell sx={{ fontWeight: 500 }}>{item?.taxPercentage ?? '0'}%</TableCell>
+                      <TableCell sx={{ fontWeight: 500 }}>Rs. {item?.other1 ?? '0'}</TableCell>
+                      <TableCell sx={{ fontWeight: 500 }}>Rs. {item?.other2 ?? '0'}</TableCell>
+                      <TableCell>
+                        <Button
+                          startIcon={<Edit size={16} />}
+                          onClick={() => handleEditItem(item)}
+                          sx={{
+                            color: '#6366f1',
+                            fontWeight: 600,
+                            '&:hover': {
+                              background: 'rgba(99, 102, 241, 0.1)',
+                            },
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  </Grow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </Fade>
+
+      <Dialog
+        open={isModalVisible}
+        onClose={handleCancelEdit}
+        maxWidth="sm"
+        fullWidth
+        TransitionComponent={Slide}
+        TransitionProps={{ direction: 'up' }}
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            color: 'white',
+            fontWeight: 800,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {editSetting ? 'Edit Setting' : 'Add New Setting'}
+          <IconButton
+            onClick={handleCancelEdit}
+            sx={{
+              color: 'white',
+              '&:hover': { background: 'rgba(255,255,255,0.2)' },
+            }}
+          >
+            <X size={20} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ p: 3 }}>
+          <form onSubmit={handleFormSubmit}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 2 }}>
+              <TextField
+                fullWidth
+                label="Delivery Charge (Rs.)"
+                name="deliveryCharge"
+                type="number"
+                value={settingForm.deliveryCharge}
+                onChange={handleFormChange}
+                required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Tax Percentage (%)"
+                name="taxPercentage"
+                type="number"
+                value={settingForm.taxPercentage}
+                onChange={handleFormChange}
+                required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Cash on Delivery Charges (Rs.)"
+                name="other1"
+                type="number"
+                value={settingForm.other1}
+                onChange={handleFormChange}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Other Charges (Rs.)"
+                name="other2"
+                type="number"
+                value={settingForm.other2}
+                onChange={handleFormChange}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+            </Box>
+          </form>
+        </DialogContent>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={handleCancelEdit}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 600,
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleFormSubmit}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              fontWeight: 600,
+              px: 4,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                transform: 'translateY(-2px)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            {editSetting ? 'Update' : 'Add'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
