@@ -39,7 +39,17 @@ export default function CustomerPage() {
 
   // Show loading while checking authentication
   if (isChecking) {
-    return <BeautifulLoader message="Loading..." />;
+    return (
+      <BeautifulLoader 
+        message="Welcome to QuickDelivery" 
+        showDebug={process.env.NODE_ENV === 'development'}
+        debugMessages={[
+          { type: 'INFO', message: 'Checking authentication status...' },
+          { type: 'INFO', message: 'Initializing application...' },
+          { type: 'SUCCESS', message: 'Loading customer interface...' },
+        ]}
+      />
+    );
   }
 
   return (

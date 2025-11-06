@@ -32,6 +32,7 @@ const Header = () => {
   const [authToken, setAuthToken] = useState(null);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userName, setUserName] = useState('');
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ useEffect(() => {
   const megaDropdownRef = useRef(null);
   const profileDropdownRef = useRef(null);
   const profileButtonRef = useRef(null);
+  const signInButtonRef = useRef(null);
 
   // Fetch Categories and Subcategories
   useEffect(() => {
@@ -88,8 +90,26 @@ useEffect(() => {
     fetchCategoriesAndSubcategories();
 
     const token = localStorage.getItem('authToken');
+    const storedUserName = localStorage.getItem('userName');
     if (token) {
       setAuthToken(token);
+    }
+    if (storedUserName) {
+      setUserName(storedUserName);
+    } else if (token) {
+      // Fetch user name if not in localStorage
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        fetch(`/api/users/${userId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.name) {
+              setUserName(data.name);
+              localStorage.setItem('userName', data.name);
+            }
+          })
+          .catch(err => console.error('Error fetching user name:', err));
+      }
     }
 
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -110,7 +130,10 @@ useEffect(() => {
       if (
         profileDropdownRef.current &&
         !profileDropdownRef.current.contains(event.target) &&
-        !profileButtonRef.current.contains(event.target)
+        profileButtonRef.current &&
+        !profileButtonRef.current.contains(event.target) &&
+        signInButtonRef.current &&
+        !signInButtonRef.current.contains(event.target)
       ) {
         setIsDropdownOpen(false);
       }
@@ -224,17 +247,17 @@ useEffect(() => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white py-3 md:py-4 sticky top-0 z-50 shadow-lg border-b border-gray-100 backdrop-blur-sm bg-white/95"
+      className="bg-white py-3 md:py-4 sticky top-0 z-[9999] shadow-lg border-b border-gray-100 backdrop-blur-sm bg-white/95 w-full overflow-hidden"
     >
-      <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-full flex items-center justify-between px-3 sm:px-4 lg:px-6 xl:px-8 gap-3 lg:gap-4 xl:gap-6">
         {/* Logo - Admin Dashboard Style */}
         <motion.div
-          className="flex items-center space-x-3 lg:space-x-6"
+          className="flex items-center flex-shrink-0"
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <Link href="/" className="flex items-center gap-2 md:gap-3 group">
+          <Link href="/" className="flex items-center gap-2 md:gap-2.5 group">
             <motion.div
               className="relative"
               whileHover={{ scale: 1.1, rotate: 5 }}
@@ -323,12 +346,12 @@ useEffect(() => {
 
         {/* Desktop Menu */}
         <motion.nav
-          className="hidden lg:flex lg:items-center lg:justify-between lg:space-x-8"
+          className="hidden lg:flex lg:items-center flex-1 justify-center min-w-0"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="flex flex-col text-black lg:flex-row text-xs lg:text-[16px] text-center lg:space-x-6">
+          <div className="flex flex-col text-black lg:flex-row text-xs lg:text-[14px] xl:text-[15px] text-center gap-4 xl:gap-5 2xl:gap-6">
             {/* Department Button */}
             <div className="relative">
               <motion.button
@@ -354,7 +377,7 @@ useEffect(() => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 top-full mt-2 w-[500px] bg-white shadow-2xl rounded-lg z-50 grid grid-cols-2 border border-gray-100 overflow-hidden"
+                    className="absolute left-0 top-full mt-2 w-[500px] bg-white shadow-2xl rounded-lg z-[10000] grid grid-cols-2 border border-gray-100 overflow-hidden"
                     onMouseLeave={handleCategoryLeave}
                   >
                     {/* First Column: Categories */}
@@ -475,13 +498,13 @@ useEffect(() => {
 
         {/* Search, Cart, and Profile */}
         <motion.div
-          className="hidden lg:flex items-center space-x-4 lg:space-x-6 mt-4 lg:mt-0"
+          className="hidden lg:flex items-center gap-4 xl:gap-5 flex-shrink-0 mt-4 lg:mt-0"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           {/* Search Form */}
-          <form className="relative flex" onSubmit={handleSearchSubmit}>
+          <form className="relative flex flex-shrink" onSubmit={handleSearchSubmit}>
             <motion.div
               className="relative"
               whileHover={{ scale: 1.02 }}
@@ -492,22 +515,22 @@ useEffect(() => {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search Items..."
-                className="border border-gray-300 rounded-full py-2.5 px-5 pr-10 text-[16px] w-48 md:w-64 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
+                className="border border-gray-300 rounded-full py-2.5 pl-4 pr-12 text-[14px] xl:text-[15px] w-48 xl:w-64 2xl:w-72 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
               />
               <motion.button
                 type="submit"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 text-[18px] transition-colors duration-300"
-                whileHover={{ scale: 1.2, rotate: 15 }}
-                whileTap={{ scale: 0.9 }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 xl:w-8 xl:h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 shadow-md hover:shadow-lg"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <FaSearch />
+                <FaSearch className="text-xs xl:text-sm" />
               </motion.button>
             </motion.div>
           </form>
 
           {/* Shopping Cart */}
           <motion.div
-            className="relative flex"
+            className="relative flex flex-shrink-0"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -522,7 +545,7 @@ useEffect(() => {
                   repeatDelay: 3,
                 }}
               >
-                <FiShoppingCart className="text-gray-700 cursor-pointer hover:text-indigo-600 transition-all duration-300 text-[24px]" />
+                <FiShoppingCart className="text-gray-700 cursor-pointer hover:text-indigo-600 transition-all duration-300 text-[24px] xl:text-[26px]" />
               </motion.div>
               {totalQuantityOfItems > 0 && (
                 <motion.span
@@ -537,19 +560,30 @@ useEffect(() => {
             </Link>
           </motion.div>
 
-          {/* Profile Icon */}
+          {/* Profile Button/Name */}
           {authToken ? (
-            <div className="relative">
-              <motion.div
+            <div className="relative flex-shrink-0">
+              <motion.button
                 ref={profileButtonRef}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-2 px-3 xl:px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 border border-indigo-200 transition-all duration-300 group"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <FiUser
-                  className="w-6 h-6 text-gray-700 cursor-pointer hover:text-indigo-600 transition-all duration-300"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                />
-              </motion.div>
+                <div className="w-8 h-8 xl:w-9 xl:h-9 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-all duration-300 flex-shrink-0">
+                  {userName ? userName.charAt(0).toUpperCase() : <FiUser className="w-4 h-4" />}
+                </div>
+                <span className="text-gray-700 font-medium text-sm whitespace-nowrap hidden xl:block max-w-[120px] truncate">
+                  {userName || 'User'}
+                </span>
+                <motion.div
+                  animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="hidden xl:block"
+                >
+                  <MdExpandMore className="w-5 h-5 text-gray-600" />
+                </motion.div>
+              </motion.button>
 
               {/* Dropdown for profile options */}
               <AnimatePresence>
@@ -560,7 +594,7 @@ useEffect(() => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-50"
+                    className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[10000]"
                   >
                     <motion.div
                       initial={{ opacity: 0, x: -10 }}
@@ -606,13 +640,66 @@ useEffect(() => {
               </AnimatePresence>
             </div>
           ) : (
-            <div className="hidden lg:flex items-center">
-              <Link
-                href="/login"
-                className="text-gray-700 text-[16px] mr-2 hover:text-indigo-600 font-medium transition-colors duration-300"
+            <div className="relative flex-shrink-0">
+              <motion.button
+                ref={signInButtonRef}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="hidden lg:flex items-center gap-2 px-4 xl:px-5 py-2 xl:py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Sign in
-              </Link>
+                <FiUser className="w-4 h-4" />
+                Sign In
+                <motion.div
+                  animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <MdExpandMore className="w-5 h-5" />
+                </motion.div>
+              </motion.button>
+
+              {/* Dropdown for Sign In options */}
+              <AnimatePresence>
+                {isDropdownOpen && (
+                  <motion.div
+                    ref={profileDropdownRef}
+                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[10000]"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      <Link
+                        href="/login"
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-md transition-all duration-200 flex items-center gap-2"
+                      >
+                        <FiUser className="w-4 h-4" />
+                        Sign In
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      <Link
+                        href="/register"
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-md transition-all duration-200 flex items-center gap-2"
+                      >
+                        <FiUser className="w-4 h-4" />
+                        Register
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </motion.div>
@@ -636,13 +723,13 @@ useEffect(() => {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search Items"
-                className="border border-gray-300 rounded-full py-1 px-3 text-[14px] w-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                className="border border-gray-300 rounded-full py-2 px-4 pr-12 text-[14px] w-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-2 text-gray-500 hover:text-indigo-600 transition-colors duration-300"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 shadow-md"
               >
-                <FaSearch />
+                <FaSearch className="text-xs" />
               </button>
             </form>
           </div>
