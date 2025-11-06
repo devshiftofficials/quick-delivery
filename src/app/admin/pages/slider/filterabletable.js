@@ -1,13 +1,51 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Fade,
+  Grow,
+  Slide,
+  Chip,
+  Tooltip,
+  CircularProgress,
+  InputAdornment,
+  Avatar,
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  Add as AddIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Image as ImageIcon,
+  Link as LinkIcon,
+  Close as CloseIcon,
+  Upload as UploadIcon,
+} from '@mui/icons-material';
+import { Image as ImageIconLucide } from 'lucide-react';
 
 const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
   const [filter, setFilter] = useState('');
   const [filteredData, setFilteredData] = useState(sliders);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // State for showing loading indicator
+  const [isLoading, setIsLoading] = useState(false);
   const [editSlider, setEditSlider] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sliderForm, setSliderForm] = useState({
@@ -15,6 +53,7 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
     link: '',
   });
   const [existingImage, setExistingImage] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +67,9 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
   }, [filter, sliders]);
 
   const handleDeleteItem = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this slider?')) {
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await fetch(`/api/slider/${id}`, {
@@ -37,7 +79,7 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
         },
       });
       if (response.ok) {
-        fetchSliders(); // Refresh the data after deleting
+        fetchSliders();
       } else {
         console.error('Failed to delete slider');
       }
@@ -51,10 +93,11 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
     setEditSlider(item);
     setSliderForm({
       imgurl: '',
-      link: item.link,
+      link: item.link || '',
     });
     setExistingImage(item.imgurl || '');
-    setIsModalOpen(true); // Open modal for editing
+    setImagePreview('');
+    setIsModalOpen(true);
   };
 
   const handleAddItem = () => {
@@ -64,12 +107,25 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
       link: '',
     });
     setExistingImage('');
-    setIsModalOpen(true); // Open modal for adding
+    setImagePreview('');
+    setIsModalOpen(true);
   };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setSliderForm({ ...sliderForm, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSliderForm({ ...sliderForm, imgurl: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const convertToBase64 = (file) => {
@@ -83,13 +139,12 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsModalOpen(false);
-    setIsLoading(true); // Show loading indicator during form submission
+    setIsLoading(true);
 
     try {
       let uploadedImageUrl = existingImage;
 
-      if (fileInputRef.current.files.length > 0) {
+      if (fileInputRef.current?.files?.length > 0) {
         const imageBase64 = await convertToBase64(fileInputRef.current.files[0]);
         const response = await fetch(`${process.env.NEXT_PUBLIC_UPLOAD_IMAGE_API}`, {
           method: 'POST',
@@ -124,20 +179,16 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
 
       if (response.ok) {
         fetchSliders();
-        setEditSlider(null);
-        setSliderForm({
-          imgurl: '',
-          link: '',
-        });
-        setExistingImage('');
-        setIsModalOpen(false); // Close modal after submission
+        handleCancelEdit();
       } else {
         console.error('Failed to save slider');
+        alert('Failed to save slider. Please try again.');
       }
     } catch (error) {
       console.error('Error saving slider:', error);
+      alert('An error occurred while saving the slider. Please try again.');
     }
-    setIsLoading(false); // Hide loading indicator after form submission
+    setIsLoading(false);
   };
 
   const handleCancelEdit = () => {
@@ -147,168 +198,525 @@ const FilterableSliderTable = ({ sliders = [], fetchSliders }) => {
       link: '',
     });
     setExistingImage('');
-    setIsModalOpen(false); // Close modal on cancel
+    setImagePreview('');
+    setIsModalOpen(false);
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen relative">
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="text-white text-xl">Processing...</div>
-        </div>
-      )}
-      <div className="bg-white shadow rounded-lg p-4 relative">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Sliders List</h2>
-          <div className="flex space-x-2">
-            <button
-              className="text-gray-600 hover:text-gray-900 focus:outline-none"
-              onClick={() => setIsSearchVisible(!isSearchVisible)}
+    <Box sx={{ bgcolor: 'white', minHeight: '100vh', p: 4 }}>
+      <Box sx={{ maxWidth: '1400px', mx: 'auto' }}>
+        <Fade in timeout={800}>
+          <Card
+            sx={{
+              borderRadius: 4,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Header */}
+            <Box
+              sx={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                color: 'white',
+                p: 4,
+                textAlign: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: -50,
+                  right: -50,
+                  width: 200,
+                  height: 200,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.1)',
+                },
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: -30,
+                  left: -30,
+                  width: 150,
+                  height: 150,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.1)',
+                },
+              }}
             >
-              <MagnifyingGlassIcon className="h-6 w-6" />
-            </button>
-            <button
-              className="text-gray-600 hover:text-gray-900 focus:outline-none"
-              onClick={handleAddItem}
-            >
-              <PlusIcon className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-        {isSearchVisible && (
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Search..."
+              <Grow in timeout={600}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2, position: 'relative', zIndex: 1 }}>
+                  <ImageIconLucide size={64} style={{ opacity: 0.9 }} />
+                </Box>
+              </Grow>
+              <Grow in timeout={800}>
+                <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, position: 'relative', zIndex: 1 }}>
+                  Slider Management
+                </Typography>
+              </Grow>
+              <Typography variant="body2" sx={{ opacity: 0.9, position: 'relative', zIndex: 1 }}>
+                Manage your website sliders and banners
+              </Typography>
+            </Box>
+
+            {/* Content */}
+            <CardContent sx={{ p: 4 }}>
+              {/* Search and Add Button */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 3,
+                  flexWrap: 'wrap',
+                  gap: 2,
+                }}
+              >
+                <Grow in timeout={1000}>
+                  <TextField
+                    placeholder="Search sliders..."
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        )}
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Image
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Link
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {Array.isArray(filteredData) &&
-                filteredData.map((item, index) => (
-                  <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {item.imgurl ? (
-                        <Image
-                 width={1000}
-                  height={1000}
-                  placeholder="data:image/jpeg;base64,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"
-          
-                          src={item.imgurl ? `${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${item.imgurl}` : '/logo.png'}
-                          alt={`Slider Image ${item.id}`}
-                          className="w-16 h-16 object-cover"
-                        />
-                      ) : (
-                        'N/A'
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {item.id}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{item.link}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                      <button
-                        onClick={() => handleEditItem(item)}
-                        className="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteItem(item.id)}
-                        className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                    size="small"
+                    sx={{
+                      flex: 1,
+                      minWidth: 250,
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+                        },
+                      },
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{ color: '#6366f1' }} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grow>
+                <Grow in timeout={1200}>
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleAddItem}
+                    sx={{
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      borderRadius: 2,
+                      px: 3,
+                      py: 1.5,
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 6px 20px rgba(99, 102, 241, 0.5)',
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)',
+                      },
+                    }}
+                  >
+                    Add New Slider
+                  </Button>
+                </Grow>
+              </Box>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 w-[700px] max-h-[90vh] overflow-auto rounded shadow-lg">
-            <h2 className="text-xl mb-4">{editSlider ? 'Edit Slider' : 'Add New Slider'}</h2>
+              {/* Table */}
+              <Fade in timeout={1400}>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    borderRadius: 3,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow
+                        sx={{
+                          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+                        }}
+                      >
+                        <TableCell sx={{ fontWeight: 700, color: '#6366f1' }}>Image</TableCell>
+                        <TableCell sx={{ fontWeight: 700, color: '#6366f1' }}>ID</TableCell>
+                        <TableCell sx={{ fontWeight: 700, color: '#6366f1' }}>Link</TableCell>
+                        <TableCell sx={{ fontWeight: 700, color: '#6366f1', textAlign: 'center' }}>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredData.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={4} align="center" sx={{ py: 8 }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                              <ImageIcon sx={{ fontSize: 64, color: '#cbd5e1' }} />
+                              <Typography variant="h6" sx={{ color: '#94a3b8' }}>
+                                No sliders found
+                              </Typography>
+                              <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+                                {filter ? 'Try adjusting your search' : 'Add your first slider to get started'}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        filteredData.map((item, index) => (
+                          <Slide
+                            key={item.id}
+                            direction="up"
+                            in
+                            timeout={300 + index * 100}
+                          >
+                            <TableRow
+                              sx={{
+                                '&:hover': {
+                                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                                  transform: 'scale(1.01)',
+                                  transition: 'all 0.3s ease',
+                                },
+                                transition: 'all 0.3s ease',
+                              }}
+                            >
+                              <TableCell>
+                                {item.imgurl ? (
+                                  <Avatar
+                                    variant="rounded"
+                                    sx={{
+                                      width: 80,
+                                      height: 60,
+                                      borderRadius: 2,
+                                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                    }}
+                                  >
+                                    <Image
+                                      width={80}
+                                      height={60}
+                                      src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${item.imgurl}`}
+                                      alt={`Slider ${item.id}`}
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                      }}
+                                    />
+                                  </Avatar>
+                                ) : (
+                                  <Chip
+                                    icon={<ImageIcon />}
+                                    label="No Image"
+                                    size="small"
+                                    sx={{ borderRadius: 2 }}
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <Chip
+                                  label={`#${item.id}`}
+                                  size="small"
+                                  sx={{
+                                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                                    color: 'white',
+                                    fontWeight: 600,
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                {item.link ? (
+                                  <Tooltip title={item.link}>
+                                    <Box
+                                      sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 1,
+                                        maxWidth: 300,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                      }}
+                                    >
+                                      <LinkIcon sx={{ fontSize: 16, color: '#6366f1' }} />
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          color: '#6366f1',
+                                          textDecoration: 'none',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                        }}
+                                      >
+                                        {item.link}
+                                      </Typography>
+                                    </Box>
+                                  </Tooltip>
+                                ) : (
+                                  <Typography variant="body2" sx={{ color: '#94a3b8', fontStyle: 'italic' }}>
+                                    No link
+                                  </Typography>
+                                )}
+                              </TableCell>
+                              <TableCell align="center">
+                                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                                  <Tooltip title="Edit">
+                                    <IconButton
+                                      onClick={() => handleEditItem(item)}
+                                      sx={{
+                                        color: '#6366f1',
+                                        '&:hover': {
+                                          background: 'rgba(99, 102, 241, 0.1)',
+                                          transform: 'scale(1.1)',
+                                        },
+                                        transition: 'all 0.3s ease',
+                                      }}
+                                    >
+                                      <EditIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title="Delete">
+                                    <IconButton
+                                      onClick={() => handleDeleteItem(item.id)}
+                                      sx={{
+                                        color: '#ef4444',
+                                        '&:hover': {
+                                          background: 'rgba(239, 68, 68, 0.1)',
+                                          transform: 'scale(1.1)',
+                                        },
+                                        transition: 'all 0.3s ease',
+                                      }}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </Box>
+                              </TableCell>
+                            </TableRow>
+                          </Slide>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Fade>
+            </CardContent>
+          </Card>
+        </Fade>
+
+        {/* Add/Edit Modal */}
+        <Dialog
+          open={isModalOpen}
+          onClose={handleCancelEdit}
+          maxWidth="md"
+          fullWidth
+          TransitionComponent={Slide}
+          TransitionProps={{ direction: 'up' }}
+          PaperProps={{
+            sx: {
+              borderRadius: 4,
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            },
+          }}
+        >
+          <DialogTitle
+            sx={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              color: 'white',
+              p: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
+              {editSlider ? 'Edit Slider' : 'Add New Slider'}
+            </Typography>
+            <IconButton
+              onClick={handleCancelEdit}
+              sx={{
+                color: 'white',
+                '&:hover': {
+                  background: 'rgba(255,255,255,0.2)',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
             <form onSubmit={handleFormSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Link</label>
-                <input
-                  type="text"
+            <DialogContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                {/* Link Field */}
+                <TextField
+                  label="Slider Link"
                   name="link"
                   value={sliderForm.link}
                   onChange={handleFormChange}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  fullWidth
+                  variant="outlined"
+                  placeholder="https://example.com"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LinkIcon sx={{ color: '#6366f1' }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: '#6366f1',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#6366f1',
+                      },
+                    },
+                  }}
                 />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Image</label>
+
+                {/* Image Upload */}
+                <Box>
+                  <Typography variant="body2" sx={{ mb: 1, fontWeight: 600, color: '#64748b' }}>
+                    Slider Image
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    startIcon={<UploadIcon />}
+                    fullWidth
+                    sx={{
+                      borderRadius: 2,
+                      py: 2,
+                      borderColor: '#6366f1',
+                      color: '#6366f1',
+                      '&:hover': {
+                        borderColor: '#7c3aed',
+                        background: 'rgba(99, 102, 241, 0.05)',
+                      },
+                    }}
+                  >
+                    {imagePreview || existingImage ? 'Change Image' : 'Upload Image'}
                 <input
                   type="file"
-                  name="imgurl"
                   ref={fileInputRef}
-                  onChange={(e) => setSliderForm({ ...sliderForm, imgurl: e.target.files[0] })}
-                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              {existingImage && (
-                <div className="mb-4">
-                  <h4 className="text-md font-medium mb-2">Existing Image</h4>
-                  <div className="relative">
-                    <Image
-                 width={1000}
-                  height={1000}
-                  placeholder="data:image/jpeg;base64,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"
-          
-                      src={existingImage ? `${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${existingImage}` : '/logo.png'}
-                      alt="Existing Slider"
-                      className="w-full h-32 object-cover"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      hidden
                     />
-                  </div>
-                </div>
-              )}
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
+                  </Button>
+                </Box>
+
+                {/* Image Preview */}
+                {(imagePreview || existingImage) && (
+                  <Fade in timeout={500}>
+                    <Box
+                      sx={{
+                        borderRadius: 3,
+                        overflow: 'hidden',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                        border: '2px solid #e0e7ff',
+                      }}
+                    >
+                      <Image
+                        width={800}
+                        height={400}
+                        src={
+                          imagePreview
+                            ? imagePreview
+                            : `${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${existingImage}`
+                        }
+                        alt="Slider Preview"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    </Box>
+                  </Fade>
+                )}
+              </Box>
+            </DialogContent>
+            <DialogActions sx={{ p: 3, gap: 2 }}>
+              <Button
                   onClick={handleCancelEdit}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                sx={{
+                  borderRadius: 2,
+                  px: 3,
+                  textTransform: 'none',
+                  color: '#64748b',
+                  '&:hover': {
+                    background: 'rgba(100, 116, 139, 0.1)',
+                  },
+                }}
                 >
                   Cancel
-                </button>
-                <button
+              </Button>
+              <Button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  {editSlider ? 'Update' : 'Add'}
-                </button>
-              </div>
+                variant="contained"
+                disabled={isLoading}
+                sx={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  borderRadius: 2,
+                  px: 4,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)',
+                    boxShadow: '0 6px 20px rgba(99, 102, 241, 0.5)',
+                  },
+                  '&:disabled': {
+                    background: '#cbd5e1',
+                  },
+                }}
+                startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
+              >
+                {isLoading ? 'Saving...' : editSlider ? 'Update Slider' : 'Add Slider'}
+              </Button>
+            </DialogActions>
             </form>
-          </div>
-        </div>
-      )}
-    </div>
+        </Dialog>
+
+        {/* Loading Overlay */}
+        {isLoading && (
+          <Box
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0,0,0,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 9999,
+            }}
+          >
+            <Box
+              sx={{
+                background: 'white',
+                borderRadius: 3,
+                p: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              <CircularProgress sx={{ color: '#6366f1' }} />
+              <Typography variant="body1" sx={{ color: '#64748b' }}>
+                Processing...
+              </Typography>
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 

@@ -624,7 +624,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Orders */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -632,24 +632,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.orders ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("orders")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.orders ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <ShoppingCart size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem", color: "#1e293b" }}>Orders</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.orders ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.orders ? "#6366f1" : "#1e293b" }}>Orders</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -658,11 +669,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/orders"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -679,7 +696,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Categories */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -687,24 +704,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.categories ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("categories")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.categories ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Tag size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}># Category</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.categories ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.categories ? "#6366f1" : "#1e293b" }}>Category</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -713,11 +741,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/categories"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -734,11 +768,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/subcategories"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -755,7 +795,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Size */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -763,24 +803,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.size ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("size")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.size ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Ruler size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Size</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.size ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.size ? "#6366f1" : "#1e293b" }}>Size</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -789,11 +840,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/size"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -810,7 +867,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Color */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -818,24 +875,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.color ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("color")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.color ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Palette size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Color</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.color ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.color ? "#6366f1" : "#1e293b" }}>Color</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -844,11 +912,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/color"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -864,6 +938,16 @@ const Sidebar = ({ setActiveComponent }) => {
           </AccordionDetails>
         </Accordion>
 
+        <Divider
+          sx={{
+            bgcolor: "rgba(99, 102, 241, 0.1)",
+            my: 1.5,
+            mx: 1,
+            height: "1px",
+            background: "linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent)",
+          }}
+        />
+
         {/* Profile */}
         <Grow in timeout={1400}>
           <ListItem disablePadding>
@@ -872,10 +956,24 @@ const Sidebar = ({ setActiveComponent }) => {
               href="/admin/pages/profile"
               sx={{
                 py: 1,
-                borderRadius: 2,
                 mx: 1,
                 mb: 0.5,
+                borderRadius: 2,
+                position: "relative",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                ...(pathname === "/admin/pages/profile" && {
+                  background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                    borderRadius: "0 4px 4px 0",
+                  },
+                }),
                 "&:hover": {
                   background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
                   transform: "translateX(8px)",
@@ -886,9 +984,9 @@ const Sidebar = ({ setActiveComponent }) => {
                   "& .MuiListItemText-primary": {
                     color: "#6366f1",
                     fontWeight: 600,
+                  },
                 },
-              },
-            }}
+              }}
             >
               <ListItemIcon
                 sx={{
@@ -898,7 +996,7 @@ const Sidebar = ({ setActiveComponent }) => {
                 }}
               >
                 <User size={20} />
-            </ListItemIcon>
+              </ListItemIcon>
               <ListItemText
                 primary="Profile"
                 primaryTypographyProps={{
@@ -906,12 +1004,12 @@ const Sidebar = ({ setActiveComponent }) => {
                   fontWeight: pathname === "/admin/pages/profile" ? 600 : 400,
                 }}
               />
-          </ListItemButton>
-        </ListItem>
+            </ListItemButton>
+          </ListItem>
         </Grow>
 
         {/* Settings */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -919,24 +1017,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.settings ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("settings")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.settings ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Settings size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Settings</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.settings ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.settings ? "#6366f1" : "#1e293b" }}>Settings</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -945,11 +1054,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/settings"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -966,11 +1081,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/facebook-pixel"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -987,7 +1108,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Coupons */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -995,24 +1116,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.coupons ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("coupons")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.coupons ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Ticket size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Coupons</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.coupons ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.coupons ? "#6366f1" : "#1e293b" }}>Coupons</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -1021,11 +1153,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/coupons"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1041,30 +1179,8 @@ const Sidebar = ({ setActiveComponent }) => {
           </AccordionDetails>
         </Accordion>
 
-        {/* Vendors */}
-        <ListItem disablePadding>
-          <ListItemButton
-            component="a"
-            href="/admin/pages/vendors"
-            sx={{
-              py: 0.5,
-              "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
-                "& .MuiListItemIcon-root": {
-                  color: "#6366f1",
-                },
-              },
-            }}
-          >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "36px" }}>
-              <Store size={20} />
-            </ListItemIcon>
-            <ListItemText primary="Vendors" primaryTypographyProps={{ fontSize: "0.95rem", color: "#1e293b" }} />
-          </ListItemButton>
-        </ListItem>
-
-        {/* Social Media */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        {/* Sliders */}
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -1072,24 +1188,170 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.sliders ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              />
+            }
+            onClick={() => toggleDropdown("sliders")}
+            sx={{
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              "&:hover": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
+                "& .MuiListItemIcon-root": {
+                  color: "#6366f1",
+                  transform: "scale(1.2)",
+                },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: isDropdownOpen.sliders ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
+              <ImageIcon size={20} />
+            </ListItemIcon>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.sliders ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.sliders ? "#6366f1" : "#1e293b" }}>Sliders</Typography>
+          </AccordionSummary>
+            <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
+            <List sx={{ p: 0 }}>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component="a"
+                  href="/admin/pages/slider"
+                  sx={{
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
+                      "& .MuiListItemText-primary": {
+                        color: "#6366f1",
+                        fontWeight: 600,
+                      },
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary="Manage Sliders"
+                    sx={{ pl: 4 }}
+                    primaryTypographyProps={{ fontSize: "0.9rem", color: "#1e293b" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </AccordionDetails>
+        </Accordion>
+
+        <Divider
+          sx={{
+            bgcolor: "rgba(99, 102, 241, 0.1)",
+            my: 1.5,
+            mx: 1,
+            height: "1px",
+            background: "linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent)",
+          }}
+        />
+
+        {/* Vendors */}
+        <ListItem disablePadding>
+          <ListItemButton
+            component="a"
+            href="/admin/pages/vendors"
+            sx={{
+              py: 1,
+              mx: 1,
+              mb: 0.5,
+              borderRadius: 2,
+              position: "relative",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              ...(pathname === "/admin/pages/vendors" && {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  borderRadius: "0 4px 4px 0",
+                },
+              }),
+              "&:hover": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
+                "& .MuiListItemIcon-root": {
+                  color: "#6366f1",
+                  transform: "scale(1.2)",
+                },
+                "& .MuiListItemText-primary": {
+                  color: "#6366f1",
+                  fontWeight: 600,
+                },
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: pathname === "/admin/pages/vendors" ? "#6366f1" : "#64748b", minWidth: "36px", transition: "all 0.3s ease" }}>
+              <Store size={20} />
+            </ListItemIcon>
+            <ListItemText 
+              primary="Vendors" 
+              primaryTypographyProps={{ 
+                fontSize: "0.95rem", 
+                fontWeight: pathname === "/admin/pages/vendors" ? 600 : 400,
+                color: pathname === "/admin/pages/vendors" ? "#6366f1" : "#1e293b"
+              }} 
+            />
+          </ListItemButton>
+        </ListItem>
+
+        {/* Social Media */}
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
+          <AccordionSummary
+            expandIcon={
+              <ChevronDown
+                size={20}
+                style={{
+                  color: "#64748b",
+                  transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.socialmedia ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("socialmedia")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
             <ListItemIcon sx={{ color: isDropdownOpen.socialmedia ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Share2 size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.socialmedia ? 600 : 400, color: isDropdownOpen.socialmedia ? "#6366f1" : "#1e293b" }}>Social Media</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.socialmedia ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.socialmedia ? "#6366f1" : "#1e293b" }}>Social Media</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -1098,11 +1360,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/socialmedia"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1119,7 +1387,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Blog */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -1127,24 +1395,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.blog ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("blog")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.blog ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <BookOpen size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Blog</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.blog ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.blog ? "#6366f1" : "#1e293b" }}>Blog</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -1153,11 +1432,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/Blogs"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1174,11 +1459,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/BlogCategory"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1195,7 +1486,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Customer Reviews */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -1203,24 +1494,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.reviews ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("reviews")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.reviews ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <Star size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Customer Reviews</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.reviews ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.reviews ? "#6366f1" : "#1e293b" }}>Customer Reviews</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -1229,11 +1531,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/reviews"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1250,7 +1558,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </Accordion>
 
         {/* Pages */}
-        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none" }}>
+        <Accordion sx={{ bgcolor: "transparent", color: "#1e293b", boxShadow: "none", mx: 1, mb: 0.5 }}>
           <AccordionSummary
             expandIcon={
               <ChevronDown
@@ -1258,24 +1566,35 @@ const Sidebar = ({ setActiveComponent }) => {
                 style={{
                   color: "#64748b",
                   transition: "transform 0.3s ease",
+                  transform: isDropdownOpen.pages ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
             }
             onClick={() => toggleDropdown("pages")}
             sx={{
-              py: 0.5,
+              py: 1,
+              borderRadius: 2,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
                 },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "scale(1.1)",
+                },
+              },
+              "&.Mui-expanded": {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "32px", mr: 0 }}>
+            <ListItemIcon sx={{ color: isDropdownOpen.pages ? "#6366f1" : "#64748b", minWidth: "36px", mr: 1, transition: "all 0.3s ease" }}>
               <FileText size={20} />
             </ListItemIcon>
-            <Typography sx={{ fontSize: "0.9rem" }}>Pages</Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: isDropdownOpen.pages ? 600 : 400, transition: "all 0.3s ease", color: isDropdownOpen.pages ? "#6366f1" : "#1e293b" }}>Pages</Typography>
           </AccordionSummary>
             <AccordionDetails sx={{ p: 0, bgcolor: "#f8fafc" }}>
             <List sx={{ p: 0 }}>
@@ -1284,11 +1603,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addPrivacyPolicy"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1305,11 +1630,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addTermsAndConditions"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1326,11 +1657,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addShippingPolicy"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1347,11 +1684,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addReturnAndExchangePolicy"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1368,11 +1711,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addAboutUs"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1389,11 +1738,17 @@ const Sidebar = ({ setActiveComponent }) => {
                   component="a"
                   href="/admin/pages/addContactUs"
                   sx={{
-                    py: 0.25,
+                    py: 0.75,
+                    mx: 1,
+                    mb: 0.5,
+                    borderRadius: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "rgba(99, 102, 241, 0.12)",
+                      background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                      transform: "translateX(8px)",
                       "& .MuiListItemText-primary": {
                         color: "#6366f1",
+                        fontWeight: 600,
                       },
                     },
                   }}
@@ -1409,25 +1764,66 @@ const Sidebar = ({ setActiveComponent }) => {
           </AccordionDetails>
         </Accordion>
 
+        <Divider
+          sx={{
+            bgcolor: "rgba(99, 102, 241, 0.1)",
+            my: 1.5,
+            mx: 1,
+            height: "1px",
+            background: "linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent)",
+          }}
+        />
+
         {/* FAQs */}
         <ListItem disablePadding>
           <ListItemButton
             component="a"
             href="/admin/pages/addFAQ"
             sx={{
-              py: 0.5,
+              py: 1,
+              mx: 1,
+              mb: 0.5,
+              borderRadius: 2,
+              position: "relative",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              ...(pathname === "/admin/pages/addFAQ" && {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  borderRadius: "0 4px 4px 0",
+                },
+              }),
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
+                },
+                "& .MuiListItemText-primary": {
+                  color: "#6366f1",
+                  fontWeight: 600,
                 },
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "36px" }}>
+            <ListItemIcon sx={{ color: pathname === "/admin/pages/addFAQ" ? "#6366f1" : "#64748b", minWidth: "36px", transition: "all 0.3s ease" }}>
               <HelpCircle size={20} />
             </ListItemIcon>
-            <ListItemText primary="FAQs" primaryTypographyProps={{ fontSize: "0.95rem", color: "#1e293b" }} />
+            <ListItemText 
+              primary="FAQs" 
+              primaryTypographyProps={{ 
+                fontSize: "0.95rem", 
+                fontWeight: pathname === "/admin/pages/addFAQ" ? 600 : 400,
+                color: pathname === "/admin/pages/addFAQ" ? "#6366f1" : "#1e293b"
+              }} 
+            />
           </ListItemButton>
         </ListItem>
 
@@ -1437,19 +1833,50 @@ const Sidebar = ({ setActiveComponent }) => {
             component="a"
             href="/admin/pages/addContactInfo"
             sx={{
-              py: 0.5,
+              py: 1,
+              mx: 1,
+              mb: 0.5,
+              borderRadius: 2,
+              position: "relative",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              ...(pathname === "/admin/pages/addContactInfo" && {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  borderRadius: "0 4px 4px 0",
+                },
+              }),
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
+                },
+                "& .MuiListItemText-primary": {
+                  color: "#6366f1",
+                  fontWeight: 600,
                 },
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "36px" }}>
+            <ListItemIcon sx={{ color: pathname === "/admin/pages/addContactInfo" ? "#6366f1" : "#64748b", minWidth: "36px", transition: "all 0.3s ease" }}>
               <Phone size={20} />
             </ListItemIcon>
-            <ListItemText primary="Contact Info" primaryTypographyProps={{ fontSize: "0.95rem", color: "#1e293b" }} />
+            <ListItemText 
+              primary="Contact Info" 
+              primaryTypographyProps={{ 
+                fontSize: "0.95rem", 
+                fontWeight: pathname === "/admin/pages/addContactInfo" ? 600 : 400,
+                color: pathname === "/admin/pages/addContactInfo" ? "#6366f1" : "#1e293b"
+              }} 
+            />
           </ListItemButton>
         </ListItem>
 
@@ -1459,19 +1886,50 @@ const Sidebar = ({ setActiveComponent }) => {
             component="a"
             href="/admin/pages/CompanyDetails"
             sx={{
-              py: 0.5,
+              py: 1,
+              mx: 1,
+              mb: 0.5,
+              borderRadius: 2,
+              position: "relative",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              ...(pathname === "/admin/pages/CompanyDetails" && {
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+                  borderRadius: "0 4px 4px 0",
+                },
+              }),
               "&:hover": {
-                bgcolor: "rgba(99, 102, 241, 0.08)",
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%)",
+                transform: "translateX(8px)",
                 "& .MuiListItemIcon-root": {
                   color: "#6366f1",
+                  transform: "scale(1.2)",
+                },
+                "& .MuiListItemText-primary": {
+                  color: "#6366f1",
+                  fontWeight: 600,
                 },
               },
             }}
           >
-            <ListItemIcon sx={{ color: "#64748b", minWidth: "36px" }}>
+            <ListItemIcon sx={{ color: pathname === "/admin/pages/CompanyDetails" ? "#6366f1" : "#64748b", minWidth: "36px", transition: "all 0.3s ease" }}>
               <Building2 size={20} />
             </ListItemIcon>
-            <ListItemText primary="Company Details" primaryTypographyProps={{ fontSize: "0.95rem", color: "#1e293b" }} />
+            <ListItemText 
+              primary="Company Details" 
+              primaryTypographyProps={{ 
+                fontSize: "0.95rem", 
+                fontWeight: pathname === "/admin/pages/CompanyDetails" ? 600 : 400,
+                color: pathname === "/admin/pages/CompanyDetails" ? "#6366f1" : "#1e293b"
+              }} 
+            />
           </ListItemButton>
         </ListItem>
 

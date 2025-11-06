@@ -33,7 +33,7 @@ const SliderPage = () => {
 
   return (
     <Fade in timeout={800}>
-      <Box sx={{ bgcolor: 'white', minHeight: '100vh' }}>
+      <Box sx={{ bgcolor: '#f8fafc', minHeight: '100vh' }}>
         <FilterableSliderTable sliders={data} fetchSliders={fetchData} />
       </Box>
     </Fade>
