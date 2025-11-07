@@ -53,7 +53,6 @@ useEffect(() => {
   const megaDropdownRef = useRef(null);
   const profileDropdownRef = useRef(null);
   const profileButtonRef = useRef(null);
-  const signInButtonRef = useRef(null);
 
   // Fetch Categories and Subcategories
   useEffect(() => {
@@ -134,8 +133,8 @@ useEffect(() => {
     };
 
     const handleClickOutsideProfile = (event) => {
-      // Only handle clicks when dropdown is open
-      if (!isDropdownOpen) return;
+      // Only handle clicks when dropdown is open (for authenticated users)
+      if (!isDropdownOpen || !authToken) return;
       
       // Check if click is inside the dropdown
       const isInsideDropdown = profileDropdownRef.current && 
@@ -145,12 +144,8 @@ useEffect(() => {
       const isInsideProfileButton = profileButtonRef.current && 
         profileButtonRef.current.contains(event.target);
       
-      // Check if click is inside the sign-in button (when not authenticated)
-      const isInsideSignInButton = signInButtonRef.current && 
-        signInButtonRef.current.contains(event.target);
-      
-      // Close dropdown only if click is outside dropdown AND outside both buttons
-      if (!isInsideDropdown && !isInsideProfileButton && !isInsideSignInButton) {
+      // Close dropdown only if click is outside dropdown AND outside button
+      if (!isInsideDropdown && !isInsideProfileButton) {
         setIsDropdownOpen(false);
       }
     };
@@ -656,66 +651,24 @@ useEffect(() => {
               </AnimatePresence>
             </div>
           ) : (
-            <div className="relative flex-shrink-0 overflow-visible">
+            <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
               <motion.button
-                ref={signInButtonRef}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="hidden lg:flex items-center gap-2 px-4 xl:px-5 py-2 xl:py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
+                onClick={() => router.push('/login')}
+                className="flex items-center gap-2 px-4 xl:px-5 py-2 xl:py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <FiUser className="w-4 h-4" />
                 Sign In
-                <motion.div
-                  animate={{ rotate: isDropdownOpen ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <MdExpandMore className="w-5 h-5" />
-                </motion.div>
               </motion.button>
-
-              {/* Dropdown for Sign In options */}
-              <AnimatePresence>
-                {isDropdownOpen && (
-                  <motion.div
-                    ref={profileDropdownRef}
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[10000]"
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      <Link
-                        href="/login"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-md transition-all duration-200 flex items-center gap-2"
-                      >
-                        <FiUser className="w-4 h-4" />
-                        Sign In
-                      </Link>
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.15 }}
-                    >
-                      <Link
-                        href="/register"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 rounded-md transition-all duration-200 flex items-center gap-2"
-                      >
-                        <FiUser className="w-4 h-4" />
-                        Register
-                      </Link>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.button
+                onClick={() => router.push('/register')}
+                className="flex items-center gap-2 px-4 xl:px-5 py-2 xl:py-2.5 rounded-full bg-white border-2 border-indigo-600 text-indigo-600 font-semibold text-sm shadow-md hover:shadow-lg hover:bg-indigo-50 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Register
+              </motion.button>
             </div>
           )}
         </motion.div>
@@ -787,12 +740,26 @@ useEffect(() => {
                 Log Out
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="text-gray-700 hover:text-indigo-600 font-medium py-2 transition-colors duration-300"
-              >
-                Sign In
-              </Link>
+              <>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    router.push('/login');
+                  }}
+                  className="text-gray-700 hover:text-indigo-600 font-medium py-2 transition-colors duration-300 text-left w-full"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    router.push('/register');
+                  }}
+                  className="text-gray-700 hover:text-indigo-600 font-medium py-2 transition-colors duration-300 text-left w-full"
+                >
+                  Register
+                </button>
+              </>
             )}
           </nav>
           </motion.div>

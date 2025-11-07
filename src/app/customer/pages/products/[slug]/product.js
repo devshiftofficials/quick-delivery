@@ -1,4 +1,4 @@
-'use client';
+  'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +16,7 @@ import { FaShare, FaTimes, FaUpload } from 'react-icons/fa';
 import Image from 'next/image';
 import { getImageProps } from '../../../../util/imageUrl';
 import { Package, Star, ShoppingCart, Heart, Share2, Check, AlertCircle, Tag } from 'lucide-react';
+import AddToCartDialog from '../../../components/AddToCartDialog';
 
 const ProductPage = ({ productData }) => {
   const router = useRouter();
@@ -37,6 +38,7 @@ const ProductPage = ({ productData }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
+  const [addedCartItem, setAddedCartItem] = useState(null);
 
 
   const [linkshare, setLinkShare] = useState(false);
@@ -56,31 +58,23 @@ const ProductPage = ({ productData }) => {
     alert("Link copied to clipboard!");
   };
 
-  // Fetch product details and related products
+  // Initialize sizes and colors from productData if available (from server-side fetch)
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true); // Start loading when fetching starts
-        const response = await axios.get(`/api/products/${product.slug}`);
-        const fetchedata = response.data;
-        const { product: fetchedProduct, relatedProducts,colors,sizes } = fetchedata.data;
-
-        console.log("Fetched234 data is  ",fetchedata)
-        setSizes(sizes|| '[]');
-        setColors(colors || '[]');
-        setProduct(fetchedProduct);
-        setRelatedProducts(relatedProducts);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      } finally {
-        setLoading(false); // Stop loading when data is fetched
+    if (productData) {
+      if (productData.colors) {
+        setColors(Array.isArray(productData.colors) ? productData.colors : []);
       }
-    };
-
-    if (product.slug) {
-      fetchProduct();
+      if (productData.sizes) {
+        setSizes(Array.isArray(productData.sizes) ? productData.sizes : []);
+      }
+      if (productData.product) {
+        setProduct(productData.product);
+      }
+      if (productData.relatedProducts) {
+        setRelatedProducts(productData.relatedProducts);
+      }
     }
-  }, [product.slug]);
+  }, [productData]);
 
 
   // Fetch reviews for the product
@@ -223,8 +217,10 @@ const ProductPage = ({ productData }) => {
         ...updatedCart[existingItemIndex],
         quantity: updatedCart[existingItemIndex].quantity + quantity,
       };
+      setAddedCartItem(updatedCart[existingItemIndex]);
     } else {
       updatedCart.push(newCartItem);
+      setAddedCartItem(newCartItem);
       console.log("Previous items in the cart after adding is  :", updatedCart);
     }
 
@@ -232,7 +228,7 @@ const ProductPage = ({ productData }) => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     dispatch(setCart(updatedCart));
 
-    toast.success('Item added to cart successfully!');
+    // Show beautiful confirmation dialog
     setIsModalOpen(true);
   };
 
@@ -326,7 +322,13 @@ const ProductPage = ({ productData }) => {
   };
 
 
-  if (loading) {
+  // Only show loader if product data is not available and we're actually loading
+  if (loading && (!product || !product.id)) {
+    return <BeautifulLoader message="Loading product..." />;
+  }
+
+  // Show loader if product data is missing
+  if (!product || !product.id) {
     return <BeautifulLoader message="Loading product..." />;
   }
 
@@ -759,13 +761,43 @@ const ProductPage = ({ productData }) => {
                 transition={{ delay: 1.0 }}
               >
                 <motion.button
-                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group"
                   onClick={handleAddToCart}
-                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileHover={{ 
+                    scale: 1.03, 
+                    y: -3,
+                    boxShadow: "0 15px 35px rgba(99, 102, 241, 0.4)",
+                  }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <ShoppingCart className="w-5 h-5" />
-                  <span>Add to Cart</span>
+                  {/* Shimmer effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    animate={{
+                      x: ['-100%', '100%'],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 2.5,
+                      ease: "easeInOut",
+                    }}
+                  />
+                  {/* Pulse glow effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-400 to-purple-400 opacity-0 group-hover:opacity-30"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0, 0.3, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                  <ShoppingCart className="w-5 h-5 relative z-10" />
+                  <span className="relative z-10">Add to Cart</span>
                 </motion.button>
                 <motion.button
                   className="flex-1 bg-gradient-to-r from-red-500 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
@@ -1080,78 +1112,25 @@ const ProductPage = ({ productData }) => {
         </motion.div>
       </div>
 
-      {/* Modal for Related Products */}
-      <Modal
+      {/* Beautiful Add to Cart Confirmation Dialog */}
+      <AddToCartDialog
         isOpen={isModalOpen}
-        onRequestClose={handleCloseModal}
-        contentLabel="Related Products"
-        style={{
-          overlay: {
-            zIndex: 10000,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          },
-          content: {
-            zIndex: 10001,
-            margin: 'auto',
-            width: 'fit-content',
-            height: 'fit-content',
-            padding: '20px',
-            textAlign: 'center',
-          },
+        onClose={handleCloseModal}
+        product={addedCartItem || {
+          name: product.name,
+          price: product.discount ? calculateOriginalPrice(product.price, product.discount) : product.price,
+          images: product.images,
+          selectedSize,
+          selectedColor,
+          discount: product.discount,
         }}
-      >
-        <div className="flex flex-col items-center">
-          <div className="flex justify-between w-full">
-            <h2 className="text-xl font-semibold mb-4">
-              Products You May Be Interested In
-            </h2>
-            <button className="text-gray-500" onClick={handleCloseModal}>
-              ✕
-            </button>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {relatedProducts.map((relatedProduct) => (
-              <div
-                key={relatedProduct.slug}
-                className="flex flex-col items-center w-32 cursor-pointer hover:shadow-lg transition-shadow duration-200"
-                onClick={() => {
-                  router.push(`/customer/pages/products/${relatedProduct.slug}`);
-                  setIsModalOpen(false);
-                }}
-              >
-                <Image
-                 width={1000}
-                  height={1000}
-                  placeholder="data:image/jpeg;base64,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"
-          
-                  src={getImageUrl(relatedProduct.images[0]?.url || '')}
-                  alt={relatedProduct.name}
-                  className="w-32 h-32 object-cover mb-2"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/placeholder-image.png';
-                  }}
-                />
-                <p
-                  className="text-sm text-gray-800 truncate w-full"
-                  title={relatedProduct.name}
-                >
-                  {relatedProduct.name}
-                </p>
-                <p className="text-sm text-red-500">
-                  Rs.{formatPrice(relatedProduct.price)}
-                </p>
-              </div>
-            ))}
-          </div>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded-md mt-4"
-            onClick={handleCloseModal}
-          >
-            Close
-          </button>
-        </div>
-      </Modal>
+        quantity={addedCartItem?.quantity || quantity}
+        onViewCart={() => {
+          setIsModalOpen(false);
+          router.push('/customer/pages/cart');
+        }}
+        onContinueShopping={handleCloseModal}
+      />
     </div>
   );
 };

@@ -223,15 +223,72 @@ const TopRatedProducts = () => {
 
                           {/* Quick Add Button */}
                           <motion.button
-                            className="absolute bottom-3 right-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white h-10 w-10 rounded-full shadow-lg flex items-center justify-center z-20"
-                            whileHover={{ scale: 1.1, rotate: 90 }}
+                            className="absolute bottom-4 right-4 bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 text-white h-12 w-12 rounded-full shadow-xl flex items-center justify-center z-30 relative overflow-hidden border-2 border-white/20 backdrop-blur-sm"
+                            whileHover={{ 
+                              scale: 1.15,
+                              boxShadow: "0 15px 35px rgba(245, 158, 11, 0.6)",
+                            }}
                             whileTap={{ scale: 0.9 }}
+                            transition={{ 
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 25,
+                            }}
                             onClick={(e) => handleAddToCart(e, product)}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-                            transition={{ duration: 0.2 }}
+                            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                            animate={{ 
+                              opacity: isHovered ? 1 : 0, 
+                              scale: isHovered ? 1 : 0.8,
+                              y: isHovered ? 0 : 10 
+                            }}
+                            style={{ pointerEvents: isHovered ? 'auto' : 'none' }}
                           >
-                            <FiShoppingCart className="w-5 h-5" />
+                            {/* Background gradient animation */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full"
+                              animate={{
+                                rotate: [0, 360],
+                              }}
+                              transition={{
+                                duration: 8,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
+                              style={{ opacity: 0.9 }}
+                            />
+                            
+                            {/* Shimmer effect */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
+                              animate={{
+                                x: ['-150%', '150%'],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                repeatDelay: 2.5,
+                                ease: "easeInOut",
+                              }}
+                            />
+                            
+                            {/* Pulse ring effect */}
+                            <motion.div
+                              className="absolute inset-0 rounded-full border-2 border-white/60"
+                              animate={{
+                                scale: [1, 1.4, 1.4],
+                                opacity: [0.6, 0, 0],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeOut",
+                              }}
+                            />
+                            
+                            {/* Icon with proper z-index */}
+                            <div className="relative z-10">
+                              <FiShoppingCart className="w-5 h-5 text-white drop-shadow-lg" />
+                            </div>
                           </motion.button>
 
                           {/* Wishlist Button */}
