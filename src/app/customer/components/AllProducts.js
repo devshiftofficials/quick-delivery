@@ -1,15 +1,22 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import BeautifulLoader from '../../components/BeautifulLoader';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/cartSlice';
+import { getImageProps } from '../../util/imageUrl';
+import { FiShoppingCart, FiHeart, FiChevronRight } from 'react-icons/fi';
+import { Star, Tag, Award, Package } from 'lucide-react';
 
 const TopRatedProducts = () => {
   const [products, setProducts] = useState([]);
-  const [visibleProducts, setVisibleProducts] = useState(12); // Show 12 products initially
+  const [visibleProducts, setVisibleProducts] = useState(12);
   const [loading, setLoading] = useState(true);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -17,11 +24,12 @@ const TopRatedProducts = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('/api/products/topRated');
-        const fetchedProducts = response.data.data;
-        setProducts(fetchedProducts);
+        const productsData = response.data?.data || response.data || [];
+        setProducts(Array.isArray(productsData) ? productsData : []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching top-rated products:', error);
+        setProducts([]);
         setLoading(false);
       }
     };
@@ -29,17 +37,21 @@ const TopRatedProducts = () => {
   }, []);
 
   const handleProductClick = (slug) => {
+    if (slug) {
     router.push(`/customer/pages/products/${slug}`);
+    }
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
     dispatch(addToCart(product));
     alert(`${product.name} has been added to the cart.`);
   };
 
   const showMoreProducts = () => {
-    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 12); // Load 12 more products
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 12);
   };
+
   const formatPrice = (price) => {
     return price.toLocaleString('en-PK', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   };
@@ -52,99 +64,283 @@ const TopRatedProducts = () => {
   };
 
   if (loading) {
-    return <BeautifulLoader message="Loading products..." />;
+    return <BeautifulLoader message="Loading top-rated products..." />;
   }
 
-  return (
-    <div className="container mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Top Rated</h2>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
 
-      {/* Responsive grid for product cards */}
-      <div className="rounded grid grid-cols-2 gap-x-2 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 px-1 sm:px-4 lg:px-0">
-        {products.slice(0, visibleProducts).map((product) => {
-          const originalPrice = calculateOriginalPrice(product.price, product.discount);
-          return (
-            <div
-              className="bg-white shadow-md rounded-sm cursor-pointer border border-gray-300 relative min-h-[320px] w-full"
-            >
-              {product.discount && (
-                <div className="absolute z-40 top-0 left-0 bg-red-100 text-red-600 font-normal text-sm px-1 py-0.5">
-                  {product.discount.toFixed(2)}% OFF
-                </div>
-              )}
-              <div className="relative overflow-hidden">
-                {product.images && product.images.length > 0 ? (
-                  <motion.img
-                    src={product.images && product.images[0] && product.images[0].url ? `${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${product.images[0].url}` : '/logo.png'}
-                    alt={product.name}
-                    className="h-[240px] w-full object-contain mb-4 rounded bg-white"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                    onClick={() => handleProductClick(product.slug)}
-                  />
-                ) : (
-                  <div
-                    className="h-[240px] w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500"
-                    onClick={() => handleProductClick(product.slug)}
-                  >
-                    No Image
-                  </div>
-                )}
-                <button
-                  className="absolute bottom-2 right-2 bg-teal-500 text-white h-8 w-8 flex justify-center items-center rounded-full shadow-lg hover:bg-teal-600 transition-colors duration-300"
-                  onClick={() => handleProductClick(product.slug)}
-                >
-                  <span className="text-xl font-bold leading-none">+</span>
-                </button>
-              </div>
-              <div className="px-2">
-                <div className="grid grid-cols-2 py-2">
-                  <div className="flex items-center">
-                    {product.discount ? (
-                      <div className="flex items-center justify-center gap-3 flex-row-reverse">
-                        <p className="text-xs font-normal text-gray-700 line-through">
-                          Rs.{formatPrice(product.price)}  {/* Format original price */}
-                        </p>
-                        <p className="text-md font-bold text-red-700">
-                          Rs.{formatPrice(originalPrice)}  {/* Format discounted price */}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-md font-bold text-gray-700">
-                        Rs.{formatPrice(product.price)}  {/* Format non-discounted price */}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <h3
-                  className="text-sm font-normal text-gray-800 overflow-hidden hover:underline hover:text-blue-400 cursor-pointer"
-                  style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: 2, // Limits to 2 lines
-                    maxHeight: '3em', // Approximate height for 2 lines
-                  }}
-                  onClick={() => handleProductClick(product.slug)}
-                >
-                  {product.name.toUpperCase()}
-                </h3>
-              </div>
-            </div>
-          );
-        })}
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 15,
+        duration: 0.5,
+      },
+    },
+  };
+
+  return (
+    <section className="py-12 md:py-16 bg-gradient-to-b from-white via-amber-50/30 to-white relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl"></div>
       </div>
 
-      {visibleProducts < products.length && (
-        <div className="text-center mt-4 bottom-0">
-          <button
-            className="border border-gray-500 text-gray-700 bg-transparent py-2 px-4 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors"
-            onClick={showMoreProducts}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <motion.div
+            className="inline-flex items-center gap-2 mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring' }}
           >
-            Show More
-          </button>
-        </div>
+            <Award className="w-6 h-6 text-amber-600" />
+            <span className="text-sm font-semibold text-amber-600 uppercase tracking-wider">
+              Customer Favorites
+            </span>
+            <Award className="w-6 h-6 text-amber-600" />
+          </motion.div>
+          
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Top Rated Products
+          </motion.h2>
+          
+          <motion.p
+            className="text-gray-600 text-lg max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            Handpicked favorites loved by our customers
+          </motion.p>
+        </motion.div>
+
+        {/* Products Grid */}
+        {products.length > 0 ? (
+          <>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6"
+            >
+              {products.slice(0, visibleProducts).map((product, index) => {
+                const originalPrice = calculateOriginalPrice(product.price, product.discount);
+                const isHovered = hoveredProduct === product.id;
+                const productKey = product.slug || product.id || `product-${index}`;
+
+                return (
+                  <motion.div
+                    key={productKey}
+                    variants={cardVariants}
+                    className="group relative"
+                    onMouseEnter={() => setHoveredProduct(product.id)}
+                    onMouseLeave={() => setHoveredProduct(null)}
+                  >
+                      <motion.div
+                        className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 h-full flex flex-col cursor-pointer"
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleProductClick(product.slug)}
+                      >
+                        {/* Top Rated Badge */}
+                        <motion.div
+                          className="absolute top-3 right-3 z-20 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1"
+                          initial={{ scale: 0, rotate: -180 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ delay: index * 0.05, type: 'spring' }}
+                        >
+                          <Star className="w-3 h-3 fill-white" />
+                          TOP
+                        </motion.div>
+
+                        {/* Discount Badge */}
+              {product.discount && (
+                          <motion.div
+                            className="absolute top-3 left-3 z-20 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: index * 0.05 + 0.1 }}
+                          >
+                            <Tag className="w-3 h-3" />
+                            {product.discount.toFixed(0)}% OFF
+                          </motion.div>
+                        )}
+
+                        {/* Image Container */}
+                        <div className="relative h-48 md:h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex-shrink-0">
+                          {product.images && product.images.length > 0 && product.images[0]?.url ? (
+                            <motion.div
+                              className="relative w-full h-full"
+                              whileHover={{ scale: 1.1 }}
+                              transition={{ duration: 0.4 }}
+                            >
+                              <Image
+                                {...getImageProps(
+                                  product.images[0].url,
+                                  product.name || 'Product',
+                                  {
+                                    width: 400,
+                                    height: 400,
+                                    className: "w-full h-full object-contain p-2"
+                                  }
+                                )}
+                              />
+                              <motion.div
+                                className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                              />
+                            </motion.div>
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                              <Package className="w-16 h-16 md:w-20 md:h-20 text-gray-400" />
+                            </div>
+                          )}
+
+                          {/* Quick Add Button */}
+                          <motion.button
+                            className="absolute bottom-3 right-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white h-10 w-10 rounded-full shadow-lg flex items-center justify-center z-20"
+                            whileHover={{ scale: 1.1, rotate: 90 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => handleAddToCart(e, product)}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FiShoppingCart className="w-5 h-5" />
+                          </motion.button>
+
+                          {/* Wishlist Button */}
+                          <motion.button
+                            className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-700 h-9 w-9 rounded-full shadow-md flex items-center justify-center z-20 hover:bg-red-50 hover:text-red-500 transition-colors"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => e.stopPropagation()}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FiHeart className="w-4 h-4" />
+                          </motion.button>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-4 flex-1 flex flex-col">
+                          {/* Price Section */}
+                          <div className="mb-2">
+                            {product.discount ? (
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-lg font-bold text-amber-600">
+                                  Rs.{formatPrice(originalPrice)}
+                                </span>
+                                <span className="text-sm text-gray-500 line-through">
+                                  Rs.{formatPrice(product.price)}
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-lg font-bold text-gray-900">
+                                Rs.{formatPrice(product.price)}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Product Name */}
+                          <h3
+                            className="text-sm font-semibold text-gray-800 mb-auto line-clamp-2 group-hover:text-amber-600 transition-colors duration-200"
+                            onClick={() => handleProductClick(product.slug)}
+                          >
+                            {product.name?.toUpperCase() || 'Product Name'}
+                          </h3>
+
+                          {/* Rating */}
+                          <div className="flex items-center gap-1 mt-2">
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${
+                                    i < Math.floor(product.rating || 5)
+                                      ? 'fill-amber-400 text-amber-400'
+                                      : 'fill-gray-200 text-gray-200'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            {product.rating && (
+                              <span className="text-xs text-gray-600 ml-1">
+                                ({product.rating})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      {/* Glow effect on hover */}
+                      <motion.div
+                        className="absolute -inset-1 bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl -z-10 transition-opacity duration-300"
+                      />
+                    </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* Show More Button */}
+            {visibleProducts < products.length && (
+              <motion.div
+                className="text-center mt-10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <motion.button
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+            onClick={showMoreProducts}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span>Show More Products</span>
+                  <FiChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </motion.div>
+            )}
+          </>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-500 text-lg">No top-rated products available</p>
+            <p className="text-gray-400 text-sm mt-2">Check back soon for top-rated products!</p>
+          </motion.div>
       )}
     </div>
+    </section>
   );
 };
 

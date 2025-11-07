@@ -117,24 +117,40 @@ useEffect(() => {
 
     // Event listeners for closing dropdowns
     const handleClickOutsideMega = (event) => {
-      if (
-        megaDropdownRef.current &&
-        !megaDropdownRef.current.contains(event.target) &&
-        !event.target.closest('#department-button')
-      ) {
+      // Only handle clicks when dropdown is open
+      if (!isMegaDropdownOpen) return;
+      
+      // Check if click is inside the dropdown
+      const isInsideDropdown = megaDropdownRef.current && 
+        megaDropdownRef.current.contains(event.target);
+      
+      // Check if click is on the department button
+      const isInsideButton = event.target.closest('#department-button');
+      
+      // Close dropdown only if click is outside dropdown AND outside button
+      if (!isInsideDropdown && !isInsideButton) {
         setIsMegaDropdownOpen(false);
       }
     };
 
     const handleClickOutsideProfile = (event) => {
-      if (
-        profileDropdownRef.current &&
-        !profileDropdownRef.current.contains(event.target) &&
-        profileButtonRef.current &&
-        !profileButtonRef.current.contains(event.target) &&
-        signInButtonRef.current &&
-        !signInButtonRef.current.contains(event.target)
-      ) {
+      // Only handle clicks when dropdown is open
+      if (!isDropdownOpen) return;
+      
+      // Check if click is inside the dropdown
+      const isInsideDropdown = profileDropdownRef.current && 
+        profileDropdownRef.current.contains(event.target);
+      
+      // Check if click is inside the profile button (when authenticated)
+      const isInsideProfileButton = profileButtonRef.current && 
+        profileButtonRef.current.contains(event.target);
+      
+      // Check if click is inside the sign-in button (when not authenticated)
+      const isInsideSignInButton = signInButtonRef.current && 
+        signInButtonRef.current.contains(event.target);
+      
+      // Close dropdown only if click is outside dropdown AND outside both buttons
+      if (!isInsideDropdown && !isInsideProfileButton && !isInsideSignInButton) {
         setIsDropdownOpen(false);
       }
     };
@@ -146,7 +162,7 @@ useEffect(() => {
       document.removeEventListener('mousedown', handleClickOutsideMega);
       document.removeEventListener('mousedown', handleClickOutsideProfile);
     };
-  }, [dispatch]);
+  }, [dispatch, isDropdownOpen, isMegaDropdownOpen]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -235,11 +251,11 @@ useEffect(() => {
 
   // Placeholder image for categories without images
   const getCategoryImage = (category) => {
-    if (category.imageUrl) {
+    if (category?.imageUrl) {
       return category.imageUrl;
     }
     // Return a placeholder image URL - using a dummy e-commerce category image
-    return 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&h=100&fit=crop&auto=format';
+    return '/placeholder-image.png';
   };
 
   return (
@@ -247,9 +263,9 @@ useEffect(() => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white py-3 md:py-4 sticky top-0 z-[9999] shadow-lg border-b border-gray-100 backdrop-blur-sm bg-white/95 w-full overflow-hidden"
+      className="bg-white py-3 md:py-4 sticky top-0 z-[9999] shadow-lg border-b border-gray-100 backdrop-blur-sm bg-white/95 w-full"
     >
-      <div className="w-full max-w-full flex items-center justify-between px-3 sm:px-4 lg:px-6 xl:px-8 gap-3 lg:gap-4 xl:gap-6">
+      <div className="w-full max-w-full flex items-center justify-between px-3 sm:px-4 lg:px-6 xl:px-8 gap-3 lg:gap-4 xl:gap-6 overflow-visible">
         {/* Logo - Admin Dashboard Style */}
         <motion.div
           className="flex items-center flex-shrink-0"
@@ -296,7 +312,7 @@ useEffect(() => {
                   ease: 'linear',
                 }}
               >
-                QuickDelivery
+                {companyName || 'QuickDelivery'}
               </motion.span>
               <span className="text-[10px] md:text-xs text-gray-500 font-medium hidden sm:block">
                 Online Ordering System
@@ -369,17 +385,15 @@ useEffect(() => {
                   <MdExpandMore />
                 </motion.span>
               </motion.button>
-              <AnimatePresence>
-                {isMegaDropdownOpen && (
-                  <motion.div
-                    ref={megaDropdownRef}
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute left-0 top-full mt-2 w-[500px] bg-white shadow-2xl rounded-lg z-[10000] grid grid-cols-2 border border-gray-100 overflow-hidden"
-                    onMouseLeave={handleCategoryLeave}
-                  >
+              {isMegaDropdownOpen && (
+                <motion.div
+                  ref={megaDropdownRef}
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-full mt-2 w-[500px] bg-white shadow-2xl rounded-lg z-[10000] grid grid-cols-2 border border-gray-100 overflow-hidden"
+                  onMouseLeave={handleCategoryLeave}
+                >
                     {/* First Column: Categories */}
                     <div className="p-4 bg-gradient-to-br from-gray-50 to-white">
                       {categories.map((category, index) => (
@@ -393,18 +407,21 @@ useEffect(() => {
                           transition={{ delay: index * 0.05 }}
                           whileHover={{ x: 5 }}
                         >
-                          {/* Category Image with Placeholder */}
-                          <div className="relative w-10 h-10 flex-shrink-0 rounded-full overflow-hidden ring-2 ring-gray-200 group-hover:ring-indigo-300 transition-all duration-300">
-                            <Image
-                              src={getCategoryImage(category)}
-                              alt={category.name}
-                              width={40}
-                              height={40}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&h=100&fit=crop&auto=format';
-                              }}
-                            />
+                          {/* Category Image with Icon Placeholder */}
+                          <div className="relative w-10 h-10 flex-shrink-0 rounded-full overflow-hidden ring-2 ring-gray-200 group-hover:ring-indigo-300 transition-all duration-300 bg-gradient-to-br from-gray-100 to-gray-200">
+                            {category?.imageUrl ? (
+                              <Image
+                                {...getImageProps(category.imageUrl, category.name, {
+                                  width: 40,
+                                  height: 40,
+                                  className: "w-full h-full object-cover"
+                                })}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100">
+                                <ShoppingBag className="w-5 h-5 text-indigo-500" />
+                              </div>
+                            )}
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/0 to-purple-500/0 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-all duration-300"></div>
                           </div>
                           {/* Category Name */}
@@ -439,8 +456,7 @@ useEffect(() => {
                       )}
                     </div>
                   </motion.div>
-                )}
-              </AnimatePresence>
+              )}
             </div>
 
             {/* Show First 5 Categories */}
@@ -498,7 +514,7 @@ useEffect(() => {
 
         {/* Search, Cart, and Profile */}
         <motion.div
-          className="hidden lg:flex items-center gap-4 xl:gap-5 flex-shrink-0 mt-4 lg:mt-0"
+          className="hidden lg:flex items-center gap-4 xl:gap-5 flex-shrink-0 mt-4 lg:mt-0 overflow-visible"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -562,7 +578,7 @@ useEffect(() => {
 
           {/* Profile Button/Name */}
           {authToken ? (
-            <div className="relative flex-shrink-0">
+            <div className="relative flex-shrink-0 overflow-visible">
               <motion.button
                 ref={profileButtonRef}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -640,7 +656,7 @@ useEffect(() => {
               </AnimatePresence>
             </div>
           ) : (
-            <div className="relative flex-shrink-0">
+            <div className="relative flex-shrink-0 overflow-visible">
               <motion.button
                 ref={signInButtonRef}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}

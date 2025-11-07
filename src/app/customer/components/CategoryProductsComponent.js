@@ -7,6 +7,7 @@ import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/cartSlice';
+import { Tag, Sparkles, Layers } from 'lucide-react';
 
 const SubcategoryProductsComponent = () => {
   const [subcategories, setSubcategories] = useState([]);
@@ -81,20 +82,98 @@ const SubcategoryProductsComponent = () => {
     alert(`${product.name} has been added to the cart.`);
   };
 
+  const gradients = [
+    'from-blue-500 to-cyan-500',
+    'from-purple-500 to-pink-500',
+    'from-green-500 to-emerald-500',
+    'from-orange-500 to-red-500',
+    'from-indigo-500 to-purple-500',
+    'from-teal-500 to-blue-500',
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold mb-6">Subcategories</h2>
-      <div className="flex space-x-4 overflow-x-auto pb-4">
-        {subcategories.map((subcategory) => (
-          <button
-            key={subcategory.id}
-            className={`cursor-pointer p-2 rounded ${selectedSubcategory === subcategory.id ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'} border border-gray-300`}
-            onClick={() => handleSubcategoryClick(subcategory.id)}
-          >
-            {subcategory.name}
-          </button>
-        ))}
-      </div>
+    <div className="container mx-auto px-4 py-8 bg-gradient-to-br from-gray-50 via-white to-indigo-50/20">
+      {/* Header Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <Layers className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Subcategories
+          </h2>
+        </div>
+        <p className="text-gray-600">Select a subcategory to browse products</p>
+      </motion.div>
+
+      {/* Subcategories Scrollable Section */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {subcategories.map((subcategory, index) => {
+          const gradient = gradients[index % gradients.length];
+          const isSelected = selectedSubcategory === subcategory.id;
+
+          return (
+            <motion.button
+              key={subcategory.id}
+              variants={itemVariants}
+              className={`relative flex-shrink-0 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                isSelected
+                  ? `bg-gradient-to-r ${gradient} text-white shadow-lg`
+                  : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-indigo-300'
+              }`}
+              onClick={() => handleSubcategoryClick(subcategory.id)}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="flex items-center gap-2">
+                <Tag className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-indigo-500'}`} />
+                <span>{subcategory.name}</span>
+              </div>
+              
+              {/* Glow effect when selected */}
+              {isSelected && (
+                <motion.div
+                  className={`absolute -inset-1 bg-gradient-to-r ${gradient} rounded-xl opacity-50 blur-md -z-10`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </motion.button>
+          );
+        })}
+      </motion.div>
 
       {selectedSubcategory && (
         <div className="mt-8">
@@ -123,8 +202,10 @@ const SubcategoryProductsComponent = () => {
                       }}
                     />
                   ) : (
-                    <div className="h-40 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500">
-                      No Image
+                    <div className="h-40 w-full bg-gradient-to-br from-gray-100 to-gray-200 mb-4 rounded flex items-center justify-center">
+                      <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
                     </div>
                   )}
                   <div className="grid grid-cols-2 gap-2">
