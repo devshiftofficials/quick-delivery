@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 // MUI Imports
 import {
@@ -44,18 +45,53 @@ const LoginPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const authToken = localStorage.getItem('authToken');
-    if (token || authToken) {
-      const userRole = localStorage.getItem('role');
-      if (userRole === 'ADMIN') {
-        router.push('/admin/pages/Main');
-      } else if (userRole === 'VENDOR') {
-        router.push('/vendor/pages/Main');
-      } else if (userRole === 'CUSTOMER') {
-        router.push('/');
+    const checkAuthAndRedirect = () => {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+      
+      if (!token) {
+        // No token, stay on login page
+        return;
       }
-    }
+
+      try {
+        // Decode the token to check if it's expired
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000; // Convert to seconds
+        
+        // Check if token is expired
+        if (decoded.exp && decoded.exp < currentTime) {
+          // Token is expired, clear it and stay on login page
+          localStorage.removeItem('token');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('role');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('vendorId');
+          return;
+        }
+
+        // Token is valid, redirect based on role
+        const userRole = localStorage.getItem('role');
+        if (userRole === 'ADMIN') {
+          router.push('/admin/pages/Main');
+        } else if (userRole === 'VENDOR') {
+          router.push('/vendor/pages/Main');
+        } else if (userRole === 'CUSTOMER') {
+          router.push('/');
+        }
+      } catch (error) {
+        // Token is invalid or malformed, clear it and stay on login page
+        console.error('Token validation error:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('vendorId');
+      }
+    };
+
+    checkAuthAndRedirect();
   }, [router]);
 
   const handleLogin = async (e) => {

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
 import {
   Box, Card, CardContent, TextField, Button, Typography,
   CircularProgress, InputAdornment, IconButton, Fade, Grow,
@@ -26,14 +27,49 @@ const RegisterPage = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const authToken = localStorage.getItem('authToken');
-    if (token || authToken) {
-      const role = localStorage.getItem('role');
-      if (role === 'ADMIN') router.push('/admin/pages/Main');
-      else if (role === 'VENDOR') router.push('/vendor/pages/Main');
-      else if (role === 'CUSTOMER') router.push('/');
-    }
+    const checkAuthAndRedirect = () => {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+      
+      if (!token) {
+        // No token, stay on register page
+        return;
+      }
+
+      try {
+        // Decode the token to check if it's expired
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000; // Convert to seconds
+        
+        // Check if token is expired
+        if (decoded.exp && decoded.exp < currentTime) {
+          // Token is expired, clear it and stay on register page
+          localStorage.removeItem('token');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('role');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('vendorId');
+          return;
+        }
+
+        // Token is valid, redirect based on role
+        const role = localStorage.getItem('role');
+        if (role === 'ADMIN') router.push('/admin/pages/Main');
+        else if (role === 'VENDOR') router.push('/vendor/pages/Main');
+        else if (role === 'CUSTOMER') router.push('/');
+      } catch (error) {
+        // Token is invalid or malformed, clear it and stay on register page
+        console.error('Token validation error:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('vendorId');
+      }
+    };
+
+    checkAuthAndRedirect();
   }, [router]);
 
   const handleChange = (e) => {
